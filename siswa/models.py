@@ -4,6 +4,7 @@ from os.path import splitext
 import uuid
 from django.db import models
 from django.db.models.fields.files import *
+from jurusan.models import *
 from django.conf import settings
 
 def unique_file_path(instance, filename):
@@ -32,12 +33,12 @@ class Siswa(models.Model):
         (6, 'Lainnya')
     )
     nama = models.CharField(max_length=255)
-    nis = models.CharField(max_length=50)
-    nisn = models.CharField(max_length=50)
-    sex = models.IntegerField(default=1,choices=PILIH_SEX)
+    nis = models.CharField(max_length=50,verbose_name='NIS')
+    nisn = models.CharField(max_length=50,verbose_name='NISN')
+    sex = models.IntegerField(default=1,choices=PILIH_SEX,verbose_name='Jenis Kelamin')
     agama = models.IntegerField(default=1,choices=PILIH_AGAMA)
-    tmp_lahir = models.CharField(max_length=100, null=True, blank=True)
-    tgl_lahir = models.DateField(null=True, blank=True)
+    tmp_lahir = models.CharField(max_length=100, null=True, blank=True,verbose_name='Tempat Lahir')
+    tgl_lahir = models.DateField(null=True, blank=True,verbose_name='Tanggal Lahir')
     #foto = models.ImageField(upload_to=os.path.join(settings.MEDIA_ROOT, "upload/siswa"), blank=True)
     foto = models.ImageField(upload_to=unique_file_path)
     nama_ayah = models.CharField(max_length=150)
@@ -46,6 +47,7 @@ class Siswa(models.Model):
     pekerjaan_ibu = models.CharField(max_length=150)
     alamat_ayah = models.TextField()
     telp_ayah = models.CharField(max_length=100)
+    id_kelas = models.ForeignKey(Kelas,on_delete=models.SET_NULL,null=True,blank=True)
 
     def __str__(self):
         return self.nama

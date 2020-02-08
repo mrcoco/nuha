@@ -6,13 +6,16 @@ class InlineMapel(admin.StackedInline):
     model = DescMapel
     extra = 4
     max_num = 4
-
 class MapelAdmin(admin.ModelAdmin):
+    list_display = ['nama_mapel']
+
+class KkmMapelAdmin(admin.ModelAdmin):
     inlines = [InlineMapel]
-    list_display = ['nama_mapel','pengetahuan','ketrampilan']
+    list_display = ['id_mapel','pengetahuan','ketrampilan']
     #list_filter = ('nama_mapel', 'pengetahuan', 'ketrampilan')
-    search_fields = ['nama_mapel', 'pengetahuan', 'ketrampilan']
+    #search_fields = ['nama_mapel', 'pengetahuan', 'ketrampilan']
     list_per_page = 25
+admin.site.register(KkmMapel,KkmMapelAdmin)
 admin.site.register(Mapel,MapelAdmin)
 #class DescAdmin(admin.ModelAdmin):
     #list_display = ['get_mapel','predikat', 'pengetahuan', 'ketrampilan']

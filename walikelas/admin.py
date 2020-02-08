@@ -11,4 +11,8 @@ class WaliKelasAdmin(admin.ModelAdmin):
         return obj.id_kelas.nama_kelas
     def get_tahun(self,obj):
         return obj.id_tahun.tahun
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return 'guru__nama', 'kelas__nama_kelas','tahun__tahun'
 admin.site.register(WaliKelas, WaliKelasAdmin)
