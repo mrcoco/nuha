@@ -5,6 +5,7 @@ import uuid
 from django.db import models
 from django.db.models.fields.files import *
 from jurusan.models import *
+from tahunajaran.models import *
 from django.conf import settings
 
 def unique_file_path(instance, filename):
@@ -47,7 +48,15 @@ class Siswa(models.Model):
     pekerjaan_ibu = models.CharField(max_length=150)
     alamat_ayah = models.TextField()
     telp_ayah = models.CharField(max_length=100)
-    id_kelas = models.ForeignKey(Kelas,on_delete=models.SET_NULL,null=True,blank=True)
 
     def __str__(self):
         return self.nama
+
+class Kelas(models.Model):
+    class Meta:
+        verbose_name_plural = "Data Kelas"
+    id_kelas = models.ForeignKey(Kelas,on_delete=models.CASCADE)
+    id_tahun = models.ForeignKey(TahunAjaran,on_delete=models.CASCADE)
+    id_siswa = models.ForeignKey(Siswa,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.id_siswa.nama

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from siswa.models import *
-from kelas.models import *
+
 class InlineKelas(admin.StackedInline):
     model = Kelas
 # Register your models here.
