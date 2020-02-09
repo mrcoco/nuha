@@ -57,10 +57,11 @@ INSTALLED_APPS = [
     'mapel',
     'guru',
     'siswa',
-    'kelas',
     'jurusan',
     'walikelas',
     'tahunajaran',
+    'mengajar',
+    'raport',
     'content'
 ]
 

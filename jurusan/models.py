@@ -13,7 +13,7 @@ class Jurusan(models.Model):
 class Kelas(models.Model):
     class Meta:
         verbose_name_plural = "Daftar Kelas"
-    id_jurusan = models.ForeignKey(Jurusan, on_delete=models.CASCADE)
+    jurusan = models.ForeignKey(Jurusan, on_delete=models.CASCADE)
     nama_kelas = models.CharField(max_length=255)
 
     def __str__(self):

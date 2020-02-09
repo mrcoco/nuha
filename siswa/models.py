@@ -55,8 +55,8 @@ class Siswa(models.Model):
 class Kelas(models.Model):
     class Meta:
         verbose_name_plural = "Data Kelas"
-    id_kelas = models.ForeignKey(Kelas,on_delete=models.CASCADE)
-    id_tahun = models.ForeignKey(TahunAjaran,on_delete=models.CASCADE)
-    id_siswa = models.ForeignKey(Siswa,on_delete=models.CASCADE)
+    kelas = models.ForeignKey(Kelas, on_delete=models.CASCADE)
+    tahun = models.ForeignKey(TahunAjaran, on_delete=models.CASCADE)
+    siswa = models.ForeignKey(Siswa, on_delete=models.CASCADE)
     def __str__(self):
-        return self.id_siswa.nama
+        return self.siswa.nama
