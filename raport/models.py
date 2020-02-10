@@ -11,8 +11,10 @@ class Raport(models.Model):
     tahun = models.ForeignKey(TahunAjaran,on_delete=models.CASCADE,verbose_name="Tahun Ajaran")
     kelas = models.ForeignKey(Kelas,on_delete=models.CASCADE,verbose_name="Kelas")
     mapel = models.ForeignKey(KkmMapel,on_delete=models.CASCADE,verbose_name="Mata Pelajaran")
-    pengetahuan = models.IntegerField(max_length=3,blank=True,null=True)
-    keterampilan = models.IntegerField(max_length=3,blank=True,null=True)
+    pengetahuan = models.IntegerField(blank=True,null=True)
+    keterampilan = models.IntegerField(blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = "Raport"

@@ -24,6 +24,8 @@ class Guru(models.Model):
     foto = models.ImageField(upload_to='guru/',blank=True,null=True)
     tmp_lahir = models.CharField(max_length=100)
     tgl_lahir = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.nama

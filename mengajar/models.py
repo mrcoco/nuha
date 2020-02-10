@@ -5,6 +5,8 @@ from mapel.models import KkmMapel
 class Mengajar(models.Model):
     guru = models.ForeignKey(Guru, on_delete=models.CASCADE, verbose_name="Guru")
     mapel = models.ForeignKey(KkmMapel, on_delete=models.CASCADE, verbose_name="Mata Pelajaran")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = "Mengajar"

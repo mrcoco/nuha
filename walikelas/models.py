@@ -10,6 +10,8 @@ class WaliKelas(models.Model):
     guru = models.ForeignKey(Guru, on_delete=models.CASCADE)
     kelas = models.ForeignKey(Kelas, on_delete=models.CASCADE)
     tahun = models.ForeignKey(TahunAjaran, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.kelas.nama_kelas

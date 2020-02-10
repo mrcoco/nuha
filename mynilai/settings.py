@@ -50,9 +50,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cleanup.apps.CleanupConfig',
     'django_code_generator',
     'rest_framework',
     'frontend',
+    'contentweb',
     'api',
     'mapel',
     'guru',
@@ -62,7 +64,6 @@ INSTALLED_APPS = [
     'tahunajaran',
     'mengajar',
     'raport',
-    'content'
 ]
 
 MIDDLEWARE = [

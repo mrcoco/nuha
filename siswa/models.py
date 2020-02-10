@@ -48,6 +48,8 @@ class Siswa(models.Model):
     pekerjaan_ibu = models.CharField(max_length=150)
     alamat_ayah = models.TextField()
     telp_ayah = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.nama
@@ -58,5 +60,8 @@ class Kelas(models.Model):
     kelas = models.ForeignKey(Kelas, on_delete=models.CASCADE)
     tahun = models.ForeignKey(TahunAjaran, on_delete=models.CASCADE)
     siswa = models.ForeignKey(Siswa, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.siswa.nama

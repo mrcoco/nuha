@@ -15,6 +15,8 @@ class Kelas(models.Model):
         verbose_name_plural = "Daftar Kelas"
     jurusan = models.ForeignKey(Jurusan, on_delete=models.CASCADE)
     nama_kelas = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.nama_kelas
