@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Guru(models.Model):
@@ -24,6 +25,7 @@ class Guru(models.Model):
     foto = models.ImageField(upload_to='guru/',blank=True,null=True)
     tmp_lahir = models.CharField(max_length=100)
     tgl_lahir = models.DateField()
+    user = models.OneToOneField(User, on_delete=models.SET_NULL,related_name='guru',null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

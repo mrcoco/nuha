@@ -4,8 +4,8 @@ from jurusan.models import *
 # Register your models here.
 class InlineKelas(admin.StackedInline):
     model = Kelas
-    extra = 2
-    max_num = 3
+    extra = 3
+    max_num = 6
 
 class JurusanAdmin(admin.ModelAdmin):
     inlines = [InlineKelas]
