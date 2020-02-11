@@ -151,7 +151,7 @@
                                     {% for model in app.items %}
                                         {% if model.has_perms %}
                                             <div>
-                                                <a{% if model.url %} href="{{ model.name }}"{% endif %} class="sidebar-link"{% if model.url_blank %} target="_blank"{% endif %}>
+                                                <a{% if model.url %} href="{{ model.url }}"{% endif %} class="sidebar-link"{% if model.url_blank %} target="_blank"{% endif %}>
                                                     <span class="sidebar-right">
                                                         <span class="sidebar-right-arrow icon-arrow-right"></span>
                                                     </span>
@@ -204,7 +204,7 @@
                             <div class="apps-list">
                                 {% for app in app_list %}
                                     {% if app.has_perms and not app.pinned %}
-                                        <a{% if app.url %} href="{{ app.app_label }}"{% endif %} class="sidebar-link popup-section-link app-item" data-app-label="{{ app.app_label }}" data-popup-section-class="sidebar-popup-section-{{ app.app_label }}" data-order="{{ forloop.counter }}"{% if app.url_blank %} target="_blank"{% endif %}>
+                                        <a{% if app.url %} href="/raport/{{ app.app_label }}"{% endif %} class="sidebar-link popup-section-link app-item" data-app-label="{{ app.app_label }}" data-popup-section-class="sidebar-popup-section-{{ app.app_label }}" data-order="{{ forloop.counter }}"{% if app.url_blank %} target="_blank"{% endif %}>
                                             <span class="sidebar-left collapsible">
                                                 <span class="sidebar-left-pin icon-star pin-toggle"></span>
                                                 <span class="sidebar-left-unpin icon-cross pin-toggle"></span>
@@ -244,7 +244,7 @@
                                         {% for model in app.items %}
                                             {% if model.has_perms %}
                                                 <li class="sidebar-popup-list-item{% if model.name %} model-{{ model.name }}{% endif %}{{ model.current|yesno:" current," }}">
-                                                    <a{% if model.url %} href="{{ model.name }}"{% endif %} class="sidebar-popup-list-item-link"{% if model.url_blank %} target="_blank"{% endif %}>
+                                                    <a{% if model.url %} href="/raport/{{ model.name }}"{% endif %} class="sidebar-popup-list-item-link"{% if model.url_blank %} target="_blank"{% endif %}>
                                                         {{ model.label }}
                                                     </a>
                                                 </li>
