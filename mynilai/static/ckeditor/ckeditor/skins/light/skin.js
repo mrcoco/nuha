@@ -73,8 +73,8 @@ CKEDITOR.skin.ua_dialog = 'ie,iequirks,ie7,ie8,opera';
 //
 // Implementing the Chameleon feature requires a bit of JavaScript programming.
 // The CKEDITOR.skin.chameleon function must be defined. It must return the CSS
-// "template" to be used to change the color of a specific CKEditor instance
-// available in the page. When a color change is required, this template is
+// "templates" to be used to change the color of a specific CKEditor instance
+// available in the page. When a color change is required, this templates is
 // appended to the page holding the editor, overriding styles defined in the
 // skin files.
 //
@@ -105,7 +105,7 @@ CKEDITOR.skin.chameleon = (function() {
         })(),
 
     // Use this function just to avoid having to repeat all these rules on
-    // several places of our template.
+    // several places of our templates.
         verticalGradient = (function() {
             var template = new CKEDITOR.template('background:#{to};' +
                 'background-image:-webkit-gradient(linear,lefttop,leftbottom,from({from}),to({to}));' +
@@ -122,8 +122,8 @@ CKEDITOR.skin.chameleon = (function() {
         })(),
 
     // Style templates for various user interface parts:
-    // * Default editor template.
-    // * Default panel template.
+    // * Default editor templates.
+    // * Default panel templates.
         templates = {
             editor: new CKEDITOR.template(
                 '{id}.cke_chrome [border-color:{defaultBorder};] ' +

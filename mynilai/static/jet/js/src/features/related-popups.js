@@ -9,7 +9,7 @@ RelatedPopups.prototype = {
     updateLinks: function($select) {
         $select.find('~ .change-related, ~ .delete-related, ~ .add-another').each(function() {
             var $link = $(this);
-            var hrefTemplate = $link.data('href-template');
+            var hrefTemplate = $link.data('href-templates');
 
             if (hrefTemplate == undefined) {
                 return;

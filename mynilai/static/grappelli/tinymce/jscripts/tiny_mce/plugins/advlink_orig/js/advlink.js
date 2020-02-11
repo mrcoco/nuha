@@ -219,7 +219,7 @@ function parseLink(link) {
 
 	var fnName = link.replace(new RegExp("\\s*([A-Za-z0-9\.]*)\\s*\\(.*", "gi"), "$1");
 
-	// Is function name a template function
+	// Is function name a templates function
 	var template = templates[fnName];
 	if (template) {
 		// Build regexp

@@ -37,7 +37,7 @@ tinyMCE.init({
     keep_styles: false,
     language: 'en',
     object_resizing: false,
-    plugins: 'advimage,advlink,fullscreen,paste,media,searchreplace,grappelli,template',
+    plugins: 'advimage,advlink,fullscreen,paste,media,searchreplace,grappelli,templates',
     // directionality : "rtl",
     
     // Callbacks
@@ -75,7 +75,7 @@ tinyMCE.init({
     theme_advanced_toolbar_align: 'left',
     theme_advanced_statusbar_location: 'bottom',
     theme_advanced_buttons1: 'formatselect,styleselect,|,bold,italic,underline,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,justifyfull,|,undo,redo,|,link,unlink,|,image,|,fullscreen,|,grappelli_adv',
-    theme_advanced_buttons2: 'search,|,pasteword,template,media,charmap,|,code,|,table,cleanup,grappelli_documentstructure',
+    theme_advanced_buttons2: 'search,|,pasteword,templates,media,charmap,|,code,|,table,cleanup,grappelli_documentstructure',
     theme_advanced_buttons3: '',
     theme_advanced_path: false,
     theme_advanced_blockformats: 'p,h1,h2,h3,h4,pre',
@@ -90,12 +90,12 @@ tinyMCE.init({
     template_templates : [
         {
             title : '2 Columns',
-            src : '/path/to/your/template/',
+            src : '/path/to/your/templates/',
             description : '2 Columns.'
         },
         {
             title : '4 Columns',
-            src : '/path/to/your/template/',
+            src : '/path/to/your/templates/',
             description : '4 Columns.'
         }
     ],

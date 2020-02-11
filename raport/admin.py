@@ -26,7 +26,7 @@ def get_predikat(kkm, nilai):
 
 class RaportAdmin(admin.ModelAdmin):
     list_display = ['siswa','tahun','kelas','mapel','get_kkm_p','pengetahuan','predikat_p','get_kkm_t','keterampilan','predikat_t']
-
+    list_filter = ('siswa','tahun','kelas')
     def get_kkm_p(self,obj):
         return obj.mapel.pengetahuan
 

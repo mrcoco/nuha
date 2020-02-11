@@ -464,7 +464,7 @@
 		//Javascript micro templating by John Resig - source at http://ejohn.org/blog/javascript-micro-templating/
 		template = helpers.template = function(templateString, valuesObject){
 
-			// If templateString is function rather than string-template - call the function for valuesObject
+			// If templateString is function rather than string-templates - call the function for valuesObject
 
 			if(templateString instanceof Function){
 			 	return templateString(valuesObject);
@@ -472,12 +472,12 @@
 
 			var cache = {};
 			function tmpl(str, data){
-				// Figure out if we're getting a template, or if we need to
-				// load the template - and be sure to cache the result.
+				// Figure out if we're getting a templates, or if we need to
+				// load the templates - and be sure to cache the result.
 				var fn = !/\W/.test(str) ?
 				cache[str] = cache[str] :
 
-				// Generate a reusable function that will serve as a template
+				// Generate a reusable function that will serve as a templates
 				// generator (and which will be cached).
 				new Function("obj",
 					"var p=[],print=function(){p.push.apply(p,arguments);};" +
@@ -485,7 +485,7 @@
 					// Introduce the data as local variables using with(){}
 					"with(obj){p.push('" +
 
-					// Convert the template into pure JavaScript
+					// Convert the templates into pure JavaScript
 					str
 						.replace(/[\r\t\n]/g, " ")
 						.split("<%").join("\t")
@@ -2059,7 +2059,7 @@
 		//Number - Spacing between data sets within X values
 		barDatasetSpacing : 1,
 
-		//String - A legend template
+		//String - A legend templates
 		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 
 	};
@@ -2356,7 +2356,7 @@
 		//Boolean - Whether we animate scaling the Doughnut from the centre
 		animateScale : false,
 
-		//String - A legend template
+		//String - A legend templates
 		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
 
 	};
@@ -2558,7 +2558,7 @@
 		//Boolean - Whether to fill the dataset with a colour
 		datasetFill : true,
 
-		//String - A legend template
+		//String - A legend templates
 		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 
 	};
@@ -2930,7 +2930,7 @@
 		//Boolean - Whether to animate scaling the chart from the centre
 		animateScale : false,
 
-		//String - A legend template
+		//String - A legend templates
 		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
 	};
 
@@ -3195,7 +3195,7 @@
 			//Boolean - Whether to fill the dataset with a colour
 			datasetFill : true,
 
-			//String - A legend template
+			//String - A legend templates
 			legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 
 		},

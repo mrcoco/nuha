@@ -14,7 +14,7 @@ var TemplateDialog = {
  		tsrc = ed.getParam("template_templates", false);
  		sel = document.getElementById('tpath');
 
-		// Setup external template list
+		// Setup external templates list
 		if (!tsrc && typeof(tinyMCETemplateList) != 'undefined') {
 			for (x=0, tsrc = []; x<tinyMCETemplateList.length; x++)
 				tsrc.push({title : tinyMCETemplateList[x][0], src : tinyMCETemplateList[x][1], description : tinyMCETemplateList[x][2]});

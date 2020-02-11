@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+TEMP_DIR = os.path.join(BASE_DIR, 'templates')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -33,12 +33,12 @@ INSTALLED_APPS = [
     #'admin_interface',
     #'colorfield',
 
-    # General use templates & template tags (should appear first)
+    # General use templates & templates tags (should appear first)
     #'adminlte3',
     # Optional: Django admin theme (must be before django.contrib.admin)
     #'adminlte3_theme',
 
-    # General use templates & template tags (should appear first)
+    # General use templates & templates tags (should appear first)
     #'django_adminlte',
      # Optional: Django admin theme (must be before django.contrib.admin)
     #'django_adminlte_theme',
@@ -81,7 +81,7 @@ ROOT_URLCONF = 'mynilai.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['template'],
+        'DIRS': [TEMP_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

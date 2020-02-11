@@ -20,6 +20,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from frontend import views as FrontViews
 
+admin.site.site_header = "SIAKAD NUHA Admin"
+admin.site.site_title = "SIAKAD NUHA Admin Portal"
+admin.site.index_title = "Sistem Informasi Akademik - SMK Ma'arif Nurul Haromain"
 
 urlpatterns = [
     #path('grappelli/', include('grappelli.urls')), # grappelli URLS
@@ -27,6 +30,8 @@ urlpatterns = [
     #path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('',FrontViews.index),
     path('frontend/',include('frontend.urls')),
+    path('raport/',include('raport.urls')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

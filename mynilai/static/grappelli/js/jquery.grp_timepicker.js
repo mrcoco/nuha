@@ -10,7 +10,7 @@
     $.widget("ui.grp_timepicker", {
         // default options
         options: {
-            // template for the container of the timepicker
+            // templates for the container of the timepicker
             template: '<div id="ui-timepicker" class="module" style="position: absolute; display: none;"></div>',
             // selector to get the ui-timepicker once it's added to the dom
             timepicker_selector: "#ui-timepicker",

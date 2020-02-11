@@ -20,7 +20,7 @@
 			// Register commands
 			ed.addCommand('mceTemplate', function(ui) {
 				ed.windowManager.open({
-					file : url + '/template.htm',
+					file : url + '/templates.htm',
 					width : ed.getParam('template_popup_width', 750),
 					height : ed.getParam('template_popup_height', 600),
 					inline : 1
@@ -32,7 +32,7 @@
 			ed.addCommand('mceInsertTemplate', t._insertTemplate, t);
 
 			// Register buttons
-			ed.addButton('template', {title : 'template.desc', cmd : 'mceTemplate'});
+			ed.addButton('template', {title : 'templates.desc', cmd : 'mceTemplate'});
 
 			ed.onPreProcess.add(function(ed, o) {
 				var dom = ed.dom;
@@ -41,7 +41,7 @@
 					if (dom.hasClass(e, 'mceTmpl')) {
 						each(dom.select('*', e), function(e) {
 							if (dom.hasClass(e, ed.getParam('template_mdate_classes', 'mdate').replace(/\s+/g, '|')))
-								e.innerHTML = t._getDateTime(new Date(), ed.getParam("template_mdate_format", ed.getLang("template.mdate_format")));
+								e.innerHTML = t._getDateTime(new Date(), ed.getParam("template_mdate_format", ed.getLang("templates.mdate_format")));
 						});
 
 						t._replaceVals(e);
@@ -72,7 +72,7 @@
 
 			el = dom.create('div', null, h);
 
-			// Find template element within div
+			// Find templates element within div
 			n = dom.select('.mceTmpl', el);
 			if (n && n.length > 0) {
 				el = dom.create('div', null);
@@ -86,11 +86,11 @@
 			each(dom.select('*', el), function(n) {
 				// Replace cdate
 				if (hasClass(n, ed.getParam('template_cdate_classes', 'cdate').replace(/\s+/g, '|')))
-					n.innerHTML = t._getDateTime(new Date(), ed.getParam("template_cdate_format", ed.getLang("template.cdate_format")));
+					n.innerHTML = t._getDateTime(new Date(), ed.getParam("template_cdate_format", ed.getLang("templates.cdate_format")));
 
 				// Replace mdate
 				if (hasClass(n, ed.getParam('template_mdate_classes', 'mdate').replace(/\s+/g, '|')))
-					n.innerHTML = t._getDateTime(new Date(), ed.getParam("template_mdate_format", ed.getLang("template.mdate_format")));
+					n.innerHTML = t._getDateTime(new Date(), ed.getParam("template_mdate_format", ed.getLang("templates.mdate_format")));
 
 				// Replace selection
 				if (hasClass(n, ed.getParam('template_selected_content_classes', 'selcontent').replace(/\s+/g, '|')))
