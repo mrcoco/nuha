@@ -19,11 +19,12 @@ class Mengajar(models.Model):
     guru = models.ForeignKey(Guru, on_delete=models.CASCADE, verbose_name="Guru")
     mapel = models.ForeignKey(Mapel, on_delete=models.CASCADE, verbose_name="Mata Pelajaran")
     kelas = models.ForeignKey(Kelas,on_delete=models.CASCADE,verbose_name="Kelas")
+    tahun = models.ForeignKey(TahunAjaran,on_delete=models.CASCADE,verbose_name="Tahun Ajaran",null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name_plural = "Mengajar"
+        verbose_name_plural = "Jadwal Mengajar"
 
     def __str__(self):
         nama = self.mapel.nama_mapel

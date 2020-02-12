@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from guru.models import *
+from guru.models import Guru
 # Register your models here.
 class GuruAdmin(admin.ModelAdmin):
 

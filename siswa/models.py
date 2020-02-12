@@ -4,8 +4,8 @@ from os.path import splitext
 import uuid
 from django.db import models
 from django.db.models.fields.files import *
-from jurusan.models import *
-from tahunajaran.models import *
+from jurusan.models import Jurusan,Kelas
+from tahunajaran.models import TahunAjaran
 from django.conf import settings
 
 def unique_file_path(instance, filename):

@@ -1,6 +1,6 @@
 from django.contrib import admin
-from walikelas.models import *
-from guru.models import *
+from walikelas.models import WaliKelas
+from guru.models import Guru
 
 # Register your models here.
 class WaliKelasAdmin(admin.ModelAdmin):

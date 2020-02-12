@@ -1,5 +1,5 @@
 from django.contrib import admin
-from jurusan.models import *
+from jurusan.models import Jurusan,Kelas
 
 # Register your models here.
 class InlineKelas(admin.StackedInline):
