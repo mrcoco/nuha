@@ -13,17 +13,6 @@ class MapelAdmin(admin.ModelAdmin):
 class KkmMapelAdmin(admin.ModelAdmin):
     inlines = [InlineMapel]
     list_display = ['mapel','pengetahuan','ketrampilan']
-    #list_filter = ('nama_mapel', 'pengetahuan', 'ketrampilan')
-    #search_fields = ['nama_mapel', 'pengetahuan', 'ketrampilan']
     list_per_page = 25
 admin.site.register(KkmMapel,KkmMapelAdmin)
 admin.site.register(Mapel,MapelAdmin)
-#class DescAdmin(admin.ModelAdmin):
-    #list_display = ['get_mapel','predikat', 'pengetahuan', 'ketrampilan']
-    # list_filter = ('nama_mapel','predikat', 'pengetahuan', 'ketrampilan')
-    #search_fields = ['get_mapel','predikat','pengetahuan', 'ketrampilan']
-    #list_per_page = 25
-    #def get_mapel(self,obj):
-        #return obj.id_mapel.nama_mapel
-
-#admin.site.register(DescMapel,DescAdmin)

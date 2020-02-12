@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-    ${app.items}
+    {% for pelajaran in mapel %}
+        {{ pelajaran.nama_mapel }}
+    {% endfor %}
+    {% for ajar in mengajar %}
+        {{ ajar.mapel_id }}
+    {% endfor %}
 {% endblock %}

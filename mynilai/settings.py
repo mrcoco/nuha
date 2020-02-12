@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_cleanup.apps.CleanupConfig',
-    'django_code_generator',
     'rest_framework',
     'frontend',
     'contentweb',
@@ -62,7 +61,6 @@ INSTALLED_APPS = [
     'jurusan',
     'walikelas',
     'tahunajaran',
-    'mengajar',
     'raport',
 ]
 
