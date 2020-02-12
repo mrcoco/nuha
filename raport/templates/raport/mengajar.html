@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="content-main">
+    <div class="module initialized" id="changelist"><div id="toolbar" class="initialized"></div><div class="clear"></div>
+        <div class="results" style="margin-bottom: 110px;">
+            <table id="result_list">
+            <thead>
+            <tr>
+                <th scope="col" class="action-checkbox-column">
+                   <div class="text"><span><input type="checkbox" id="action-toggle" style="display: inline-block;"><label for="action-toggle"></label></span></div>
+                   <div class="clear"></div>
+                </th>
+                <th scope="col" class="sortable column-guru">
+                   <div class="text">Guru</div>
+                   <div class="clear"></div>
+                </th>
+                <th scope="col" class="sortable column-mapel">
+                   <div class="text">Mata Pelajaran</div>
+                   <div class="clear"></div>
+                </th>
+                <th scope="col" class="sortable column-kelas">
+                   <div class="text">Kelas</div>
+                   <div class="clear"></div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for mengajar in jadwal.all %}
+                <tr class="row1">
+                    <td class="action-checkbox">
+                        <input type="checkbox" name="_selected_action" value="3" class="action-select" id="unique_checkbox_id_0">
+                        <label for="unique_checkbox_id_0"></label></td>
+                        <th class="field-guru nowrap">
+                            {{ mengajar.guru.nama }}
+                        </th>
+                    <td class="field-mapel nowrap">{{ mengajar.mapel }}</td>
+                    <td class="field-kelas nowrap">{{ mengajar.kelas }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        <div class="changelist-footer fixed">
+            <div class="label">{{ jadwal.count }} Jadwal Mengajar</div></p><div class="cf"></div>
+        </div>
+    </div>
+  </div>
+{% endblock %}

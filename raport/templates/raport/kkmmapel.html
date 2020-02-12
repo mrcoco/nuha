@@ -1,9 +1,61 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% for pelajaran in mapel %}
-        {{ pelajaran.nama_mapel }}
-    {% endfor %}
-    {% for ajar in mengajar %}
-        {{ ajar.mapel_id }}
-    {% endfor %}
+    <div id="content-main">
+        <ul class="object-tools initialized">
+          <li>
+            <a href="#" class="addlink">
+              Add kkm mapel
+            </a>
+          </li>
+        </ul>
+    <div class="module initialized" id="changelist">
+        <div id="toolbar" class="initialized"></div>
+        <div class="clear"></div>
+        <div class="results" style="margin-bottom: 110px;">
+            <table id="result_list">
+                <thead>
+                    <tr>
+                        <th scope="col" class="action-checkbox-column">
+                           <div class="text">
+                               <span>
+                                   <input type="checkbox" id="action-toggle" style="display: inline-block;">
+                                   <label for="action-toggle"></label>
+                               </span>
+                           </div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">Mata Pelajaran</a></div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-pengetahuan">
+                           <div class="text"><a href="#">Pengetahuan</a></div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-ketrampilan">
+                           <div class="text"><a href="#">Ketrampilan</a></div>
+                           <div class="clear"></div>
+                        </th>
+                    </tr>
+                </thead>
+            <tbody>
+            <tr class="row1">
+                <td class="action-checkbox">
+                    <input type="checkbox" name="_selected_action" value="1" class="action-select" id="unique_checkbox_id_0">
+                    <label for="unique_checkbox_id_0"></label>
+                </td>
+                <th class="field-mapel nowrap">
+                    <a href="#">Bahasa Indonesia - TBX-A - 2019/2020</a>
+                </th>
+                <td class="field-pengetahuan">77</td>
+                <td class="field-ketrampilan">77</td></tr>
+            </tbody>
+            </table>
+        </div>
+        <div class="changelist-footer fixed">
+            <div class="label">1 kkm mapel</div>
+            <div class="cf"></div>
+        </div>
+    </div>
+  </div>
 {% endblock %}

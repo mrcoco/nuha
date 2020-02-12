@@ -4,12 +4,8 @@ from django.shortcuts import render,redirect
 def index(request):
     return render(request,'index.html')
 def login(request):
-
-    #try:
-    #    if request.session['userid']:
-    #        return redirect('raport')
-    #except:
-    #    pass
+    if request.user.is_authenticated:
+        return redirect('raport-index')
     return render(request,'login.html',{"page": login})
 def blog(request):
     return render(request,blog.html)

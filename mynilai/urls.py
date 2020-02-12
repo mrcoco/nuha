@@ -29,7 +29,7 @@ urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
     #path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('',FrontViews.index),
-    path('login/',FrontViews.login),
+    path('login/',FrontViews.login,name="login"),
     path('frontend/',include('frontend.urls')),
     path('raport/',include('raport.urls')),
     path('admin/', admin.site.urls),

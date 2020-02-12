@@ -39,7 +39,7 @@ class KkmMapel(models.Model):
 
     tahun = models.ForeignKey(TahunAjaran, on_delete=models.CASCADE, verbose_name='Tahun Ajaran')
     kelas = models.ForeignKey(Kelas, on_delete=models.CASCADE, verbose_name='Kelas')
-    mapel = models.ForeignKey(Mengajar, on_delete=models.CASCADE, verbose_name='Mata Pelajaran')
+    mapel = models.OneToOneField(Mengajar, on_delete=models.CASCADE,unique=True, verbose_name='Mata Pelajaran')
     pengetahuan = models.IntegerField(blank=True,null=True)
     ketrampilan = models.IntegerField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
