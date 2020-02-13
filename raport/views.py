@@ -3,8 +3,6 @@ from guru.models import Guru
 from mapel.models import KkmMapel,Kelas,Mapel,DescMapel,Mengajar
 
 
-
-
 # Create your views here.
 def index(request):
     if not request.user.is_authenticated:
@@ -13,39 +11,31 @@ def index(request):
 
     }
     return render(request,'raport/index.html',context)
-# def index(request):
-#     guru = get_guru(request.user.id)
-#     mengajar = Mengajar.objects.filter(guru=guru.id)
-#     #kkm = KkmMapel.objects.get(mapel=mengajar.mapel)
-#     context = {
-#         #'kkm': kkm,
-#         'iduser': request.user.id,
-#         'mengajar': mengajar,
-#         'userguru': guru.nama
-#     }
-#     return render(request,'raport/index.html',context)
-#
+
 def kkmmapel(request):
-    # guru  = get_guru(request.user.id)
-    # mapel = Mapel.objects.all()
-    # mengajar = get_mengajar(guru)
-    # kkm = get_kkm(mengajar)
+    guru  = get_guru(request.user.id)
+    jadwal = get_mengajar(guru)
     context = {
+        'guru': guru,
+        'jadwal': jadwal
     }
     return render(request,'raport/kkmmapel.html',context)
 
+def kkmadd(request):
+    pass
 
-def get_kkm(mengajar):
-    return KkmMapel.objects.filter(mapel=mengajar.mapel_id)
+def kkmupdate(request):
+    pass
 
+def get_kkm(id):
+    return KkmMapel.objects.filter(mapel_id=id)
 
 def get_mengajar(guru):
-    return Mengajar.objects.filter(guru=guru.id)
-
+    return Mengajar.objects.filter(guru_id=guru.id)
 
 def mengajar(request):
     guru = get_guru(request.user.id)
-    jadwal = Mengajar.objects.filter(guru_id=guru.id)
+    jadwal = get_mengajar(guru)
     context = {
         'jadwal': jadwal,
         'guru': guru

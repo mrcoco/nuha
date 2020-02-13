@@ -39,16 +39,21 @@
                     </tr>
                 </thead>
             <tbody>
-            <tr class="row1">
-                <td class="action-checkbox">
-                    <input type="checkbox" name="_selected_action" value="1" class="action-select" id="unique_checkbox_id_0">
-                    <label for="unique_checkbox_id_0"></label>
-                </td>
-                <th class="field-mapel nowrap">
-                    <a href="#">Bahasa Indonesia - TBX-A - 2019/2020</a>
-                </th>
-                <td class="field-pengetahuan">77</td>
-                <td class="field-ketrampilan">77</td></tr>
+            {% for mengajar in jadwal.all %}
+{#                {% for kkm in mengajar.kkmmapel.all %}#}
+                    <tr class="row1">
+                        <td class="action-checkbox">
+                            <input type="checkbox" name="_selected_action" value="1" class="action-select" id="unique_checkbox_id_0">
+                            <label for="unique_checkbox_id_0"></label>
+                        </td>
+                        <th class="field-mapel nowrap">
+                            <a href="{{ mengajar.kkmmapel.id }}/">{{ mengajar.kkmmapel }}</a>
+                        </th>
+                        <td class="field-pengetahuan">{{ mengajar.kkmmapel.pengetahuan }}</td>
+                        <td class="field-ketrampilan">{{ mengajar.kkmmapel.ketrampilan }}</td>
+                    </tr>
+{#                {% endfor %}#}
+            {% endfor %}
             </tbody>
             </table>
         </div>

@@ -10,5 +10,7 @@ urlpatterns = [
     path('',views.index,name="raport-index"),
     path('raport/',views.raport,name="raport"),
     path('mengajar/',views.mengajar,name="mengajar"),
-    path('kkmmapel/',views.kkmmapel,name="kkmmapel")
+    path('kkmmapel/',views.kkmmapel,name="kkmmapel"),
+    path('kkmapel/<int:id>',views.kkmupdate,name="kkm-update"),
+    path('kkmmapel/add',views.kkmadd,name="kkm-add")
 ]
