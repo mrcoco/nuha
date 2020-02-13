@@ -1,9 +1,39 @@
+from django.views.generic import CreateView, ListView, UpdateView
 from django.shortcuts import render,redirect
 from guru.models import Guru
 from mapel.models import KkmMapel,Kelas,Mapel,DescMapel,Mengajar
+from raport.models import Raport
+from .kkmform import KkmFormset
 
 
 # Create your views here.
+
+class RaportIndexView(ListView):
+    model = Raport
+
+class KkmCreateView(CreateView):
+    model = KkmMapel
+    success_url = 'raport'
+    fields = '__all__'
+    def get_context_data(self, **kwargs):
+        context = super(KkmCreateView,self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['kkm_formset'] = KkmFormset(self.request.POST)
+        else:
+            context['kkm_formset'] = KkmFormset()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        formset = context['kkm_formset']
+        if formset.is_valid():
+            response = super().form_valid(form)
+            formset.instance = self.object
+            formset.save()
+            return response
+        else:
+            return super().form_invalid(form)
+
 def index(request):
     if not request.user.is_authenticated:
         return redirect('login')

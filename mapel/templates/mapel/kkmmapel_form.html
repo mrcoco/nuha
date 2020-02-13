@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="content-main">
+        <div class="changeform-navigation initialized">
+            <a href="#" class="changeform-navigation-button segmented-button left" title="Bahasa Indonesia - TBX-B - 2019/2020"><span class="changeform-navigation-button-icon left icon-arrow-left"></span><span class="changeform-navigation-button-label">
+                            Bahasa Indonesia - TBX-B - 2019/2020
+                    </span></a><a class="changeform-navigation-button segmented-button right disabled" title=""><span class="changeform-navigation-button-icon right icon-arrow-right"></span><span class="changeform-navigation-button-label">
+                            ---
+                    </span></a>
+        </div>
+        <ul class="object-tools initialized">
+            <li>
+                <a href="/admin/mapel/kkmmapel/1/history/" class="historylink">History</a>
+            </li>
+        </ul>
+
+        <form action="" method="post" id="kkmmapel_form" novalidate="">
+            {%  csrf_token %}
+            {% if form.errors %}
+                <!-- Error messaging -->
+                <div id="errors">
+                    <div class="inner">
+                        <p class="errornote">There were some errors in the information you entered. Please correct the following:</p>
+                        <ul>
+                            {% for field in form %}
+                                {% if field.errors %}<li class="errornote">{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!-- /Error messaging -->
+            {% endif %}
+        <div>
+            <fieldset class="module aligned module_0 initialized">
+                <div class="form-row field-tahun">
+                    <div>
+                        <label for="{{form.tahun.id_for_label}}">{{ form.tahun.label_tag }}</label>
+                        <div class="related-widget-wrapper">
+                        {{ form.tahun }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row field-kelas">
+                    <div>
+                        <label for="{{form.kelas.id_for_label}}">{{ form.kelas.label_tag }}</label>
+                        <div class="related-widget-wrapper">
+                            {{ form.kelas }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row field-mapel">
+                    <div>
+                        <label for="{{ form.id_for_mapel }}">{{ form.mapel.label_tag}}</label>
+                        <div class="related-widget-wrapper">
+                            {{ form.mapel }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row field-pengetahuan">
+                    <div>
+                        <label for="{{ form.pengetahuan.id_for_label}}">{{ form.pengetahuan.label_tag }}</label>
+                        {{ form.pengetahuan }}
+                    </div>
+                </div>
+                <div class="form-row field-ketrampilan">
+                    <div>
+                        <label for="{{ form.ketrampilan.id_for_label}}">{{ form.ketrampilan.label_tag }}</label>
+                        {{ form.ketrampilan }}
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="module ">
+                {{ kkm_formset.management_form }}
+                 {% if kkm_formset.non_form_errors %}
+                  <div class="alert alertdanger">{{formset.non_form_errors}}</div>
+                {% endif %}
+                {% for form in kkm_formset %}
+            <div class="inline-related initialized dynamic-descmapel_set" id="descmapel_set">
+              <h3><b>Desc mapel:</b>&nbsp;<span class="inline_label">#{{ form.predikat.id.auto_id }}</span>
+              </h3>
+            <fieldset class="module aligned ">
+
+                <div class="form-row field-predikat">
+                    <div>
+                        <label for="{{ form.predikat.id_for_label }}">{{ form.predikat.label_tag }}</label>
+                        {{ form.predikat }}
+                    </div>
+                </div>
+                    <div class="form-row field-predikat">
+                    <div>
+                        <label for="{{ form.pengetahuan.id_for_label }}">{{ form.pengetahuan.label_tag }}</label>
+                        {{ form.pengetahuan }}
+                    </div>
+                </div>
+                    <div class="form-row field-predikat">
+                    <div>
+                        <label for="{{ form.ketrampilan.id_for_label }}">{{ form.ketrampilan.label_tag }}</label>
+                        {{ form.ketrampilan }}
+                    </div>
+                </div>
+
+            </fieldset>
+            </div>
+                {% endfor %}
+            </fieldset>
+
+                <div class="submit-row">
+                <input type="submit" value="Save" class="default" name="_save">
+                </div>
+        <script type="text/javascript" id="django-admin-form-add-constants" src="/static/admin/js/change_form.js"></script>
+        <script type="text/javascript" id="django-admin-prepopulated-fields-constants" src="/static/admin/js/prepopulate_init.js" data-prepopulated-fields="[]"></script>
+        </div>
+        </div>
+    </form>
+    </div>
+{% endblock %}

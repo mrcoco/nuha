@@ -1,4 +1,4 @@
 from django.forms.models import inlineformset_factory
-from .models import KkmMapel,DescMapel
+from mapel.models import KkmMapel,DescMapel
 
-KkmFormset = inlineformset_factory(KkmMapel,DescMapel,fields=['mapel','pengetahuan','ketrampilan','predikat'],exclude=[],can_delete=False)
+KkmFormset = inlineformset_factory(KkmMapel,DescMapel,fields=['mapel','pengetahuan','ketrampilan','predikat'],exclude=[],can_delete=False,max_num=4,min_num=4)

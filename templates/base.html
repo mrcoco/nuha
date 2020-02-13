@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css" href="{% static "jet/css/themes/"|add:THEME|add:"/base.css" as url %}{{ url|jet_append_version }}" class="base-stylesheet" />
 <link rel="stylesheet" type="text/css" href="{% static "jet/css/themes/"|add:THEME|add:"/select2.theme.css" as url %}{{ url|jet_append_version }}" class="select2-stylesheet" />
 <link rel="stylesheet" type="text/css" href="{% static "jet/css/themes/"|add:THEME|add:"/jquery-ui.theme.css" as url %}{{ url|jet_append_version }}" class="jquery-ui-stylesheet" />
-
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
 
 <script type="text/javascript" charset="utf-8">
     var DATE_FORMAT = "%Y-%m-%d";
@@ -23,12 +23,17 @@
 </script>
 <script type="text/javascript" src="/jet/jsi18n/"></script>
 <script src="/static/jet/js/build/bundle.min.js?v=1.0.8"></script>
-    <script src="/static/jet/js/i18n/select2/en.js?v=1.0.8"></script>
+<script src="/static/jet/js/i18n/select2/en.js?v=1.0.8"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script type="text/javascript" src="/static/admin/js/inlines.js"></script>
+<script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
 <meta name="robots" content="NONE,NOARCHIVE" />
 </head>
 
 
-<body class="menu-pinned " data-admin-utc-offset="0">
+<body class="menu-pinned app-mapel model-kkmmapel change-form" data-admin-utc-offset="0">
 <!-- Container -->
 <div id="container">
     {% if not is_popup %}
