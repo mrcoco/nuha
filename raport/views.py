@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect
 from guru.models import Guru
 from mapel.models import KkmMapel,Kelas,Mapel,DescMapel,Mengajar
 from raport.models import Raport
-from .kkmform import KkmFormset
+from .kkmform import KkmFormset,KkmmapelForm
 
 
 # Create your views here.
@@ -20,7 +20,13 @@ class KkmCreateView(CreateView):
         if self.request.POST:
             context['kkm_formset'] = KkmFormset(self.request.POST)
         else:
-            context['kkm_formset'] = KkmFormset()
+            guru = get_guru(self.request.user.id)
+            form = KkmmapelForm()
+            form.fields['mapel'].queryset = Mengajar.objects.filter(guru_id=guru.id)
+            form.fields['kelas'].queryset = Kelas.objects.filter(mengajar__guru_id=1).distinct()
+            formset = KkmFormset()
+            context['kkm_formset'] = formset
+            context['form'] = form
         return context
 
     def form_valid(self, form):

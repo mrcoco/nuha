@@ -3,7 +3,7 @@
     <div id="content-main">
         <ul class="object-tools initialized">
           <li>
-            <a href="#" class="addlink">
+            <a href="/raport/kkmmapel/add" class="addlink">
               Add kkm mapel
             </a>
           </li>
@@ -28,6 +28,14 @@
                            <div class="text"><a href="#">Mata Pelajaran</a></div>
                            <div class="clear"></div>
                         </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">Kelas</a></div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">Tahun Ajaran</a></div>
+                           <div class="clear"></div>
+                        </th>
                         <th scope="col" class="sortable column-pengetahuan">
                            <div class="text"><a href="#">Pengetahuan</a></div>
                            <div class="clear"></div>
@@ -47,10 +55,12 @@
                             <label for="unique_checkbox_id_0"></label>
                         </td>
                         <th class="field-mapel nowrap">
-                            <a href="{{ mengajar.kkmmapel.id }}/">{{ mengajar.kkmmapel }}</a>
+                            <a href="{% if mengajar.kkmapel.id %}/raport/kkmmapel/{{ mengajar.kkmmapel.id }}/change{% else %}#{% endif %}">{{ mengajar.mapel.nama_mapel }}</a>
                         </th>
-                        <td class="field-pengetahuan">{{ mengajar.kkmmapel.pengetahuan }}</td>
-                        <td class="field-ketrampilan">{{ mengajar.kkmmapel.ketrampilan }}</td>
+                        <td class="field-pengetahuan">{{ mengajar.kelas.nama_kelas }}</td>
+                        <td class="field-pengetahuan">{{ mengajar.tahun.tahun }}</td>
+                        <td class="field-pengetahuan">{% if mengajar.kkmmaple.pengetahuan %}{{ mengajar.kkmmapel.pengetahuan }}{% else %} Belum Ada Nilai{% endif %}</td>
+                        <td class="field-ketrampilan">{% if mengajar.kkmmapel.keterangan %}{{ mengajar.kkmmapel.ketrampilan }}{% else %}Belum Ada Nilai{% endif %}</td>
                     </tr>
 {#                {% endfor %}#}
             {% endfor %}

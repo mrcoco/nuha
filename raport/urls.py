@@ -12,6 +12,6 @@ urlpatterns = [
     path('raport/',views.raport,name="raport"),
     path('mengajar/',views.mengajar,name="mengajar"),
     path('kkmmapel/',views.kkmmapel,name="kkmmapel"),
-    path('kkmapel/<int:id>',views.kkmupdate,name="kkm-update"),
+    path('kkmapel/<int:id>/change',views.kkmupdate,name="kkm-update"),
     path('kkmmapel/add',KkmCreateView.as_view(),name="kkm-add")
 ]
