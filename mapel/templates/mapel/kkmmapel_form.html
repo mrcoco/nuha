@@ -2,26 +2,27 @@
 {% block content %}
     <div id="content-main">
         <div class="changeform-navigation initialized">
-            <a href="#" class="changeform-navigation-button segmented-button left" title="Bahasa Indonesia - TBX-B - 2019/2020"><span class="changeform-navigation-button-icon left icon-arrow-left"></span><span class="changeform-navigation-button-label">
-                            KKM
-                    </span></a><a class="changeform-navigation-button segmented-button right disabled" title=""><span class="changeform-navigation-button-icon right icon-arrow-right"></span><span class="changeform-navigation-button-label">
-                            Deskripsi KKM
-                    </span></a>
+            <a href="/raport/kkmmapel/add#/tab/module_0/" class="changeform-navigation-button segmented-button left" title="#">
+                <span class="changeform-navigation-button-icon left icon-arrow-left"></span><span class="changeform-navigation-button-label">KKM</span>
+            </a>
+            <a href="/raport/kkmmapel/add#/tab/module_1/" class="changeform-navigation-button segmented-button right " title="">
+                <span class="changeform-navigation-button-icon right icon-arrow-right"></span><span class="changeform-navigation-button-label">Deskripsi KKM</span>
+            </a>
         </div>
         <ul class="object-tools initialized">
             <li>
-                <a href="/admin/mapel/kkmmapel/1/history/" class="historylink">History</a>
-                {{ kelas }}
+                <a href="/raport/kkmmapel/" class="historylink">Back to KKM</a>
             </li>
         </ul>
 
         <form action="" method="post" id="kkmmapel_form" novalidate="">
             {%  csrf_token %}
+
             {% if form.errors %}
                 <!-- Error messaging -->
                 <div id="errors">
                     <div class="inner">
-                        <p class="errornote">There were some errors in the information you entered. Please correct the following:</p>
+                        <p class="errornote">There were some errors in the information you entered on KKM. Please correct the following:</p>
                         <ul>
                             {% for field in form %}
                                 {% if field.errors %}<li class="errornote">{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
@@ -31,6 +32,20 @@
                 </div>
                 <!-- /Error messaging -->
             {% endif %}
+            {% if kkm_formset.errors %}
+                    <!-- Error messaging -->
+                    <div id="errors">
+                        <div class="inner">
+                            <p class="errornote">There were some errors in the information you entered on KKM description. Please correct the following:</p>
+                            <ul>
+                                {% for field in kkm_formset %}
+                                    {% if field.errors %}<li class="errornote">{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /Error messaging -->
+                {% endif %}
         <div>
             <fieldset class="module aligned module_0 initialized">
                 <div class="form-row field-tahun">
@@ -38,6 +53,7 @@
                         <label for="{{form.tahun.id_for_label}}">{{ form.tahun.label_tag }}</label>
                         <div class="related-widget-wrapper">
                         {{ form.tahun }}
+                        {{ form.id }}
                         </div>
                     </div>
                 </div>
@@ -77,6 +93,7 @@
                   <div class="alert alertdanger">{{formset.non_form_errors}}</div>
                 {% endif %}
                 {% for form in kkm_formset %}
+
             <div class="inline-related initialized dynamic-descmapel_set" id="descmapel_set">
               <h3><b>Desc mapel:</b>&nbsp;<span class="inline_label">#{{ form.predikat.id.auto_id }}</span>
               </h3>
@@ -86,6 +103,7 @@
                     <div>
                         <label for="{{ form.predikat.id_for_label }}">{{ form.predikat.label_tag }}</label>
                         {{ form.predikat }}
+                        {{ form.id }}
                     </div>
                 </div>
                     <div class="form-row field-predikat">

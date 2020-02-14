@@ -64,7 +64,7 @@
                             <label for="unique_checkbox_id_0"></label>
                         </td>
                         <th class="field-mapel nowrap">
-                            <a href="{% if mengajar.kkmapel.id %}/raport/kkmmapel/{{ mengajar.kkmmapel.id }}/change{% else %}#{% endif %}">{{ mengajar.mapel.nama_mapel }}</a>
+                            <a href="{% if mengajar.kkmmapel.id %}/raport/kkmmapel/{{ mengajar.kkmmapel.id }}/{% else %}#{% endif %}">{{ mengajar.mapel.nama_mapel }}</a>
                         </th>
                         <td class="field-pengetahuan">{{ mengajar.kelas.nama_kelas }}</td>
                         <td class="field-pengetahuan">{{ mengajar.tahun.tahun }}</td>
@@ -77,7 +77,7 @@
             </table>
         </div>
         <div class="changelist-footer fixed">
-            <div class="label">{{ kkm.count }} KKM terisi dari {{ jadwal.count }} Mata pelajaran</div>
+            <div class="label"><b>{{ kkm.count }}</b> KKM terisi dari <b>{{ jadwal.count }}</b> Mata pelajaran</div>
             <div class="cf"></div>
         </div>
     </div>

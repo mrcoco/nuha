@@ -18,6 +18,7 @@ from django.urls import path
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 from frontend import views as FrontViews
 
 admin.site.site_header = "SIAKAD NUHA Admin"
@@ -29,7 +30,7 @@ urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
     #path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('',FrontViews.index),
-    path('login/',FrontViews.login,name="login"),
+    path('login/', FrontViews.loginpage,name="user_login"),
     path('frontend/',include('frontend.urls')),
     path('raport/',include('raport.urls')),
     path('admin/', admin.site.urls),

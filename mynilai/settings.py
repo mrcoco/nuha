@@ -151,6 +151,9 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+LOGIN_REDIRECT_URL = '/raport/'
+LOGOUT_REDIRECT_URL = '/raport/'
+LOGIN_URL = '/login/'
 
 #JET_SIDE_MENU_COMPACT = True
 

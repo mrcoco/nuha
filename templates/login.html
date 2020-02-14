@@ -35,7 +35,8 @@
     <div id="content" class="{% block coltype %}colM{% endblock %}">
         <div id="content-main">
 
-        <form action="/admin/login/?next=/admin/" method="post" id="login-form"><input type="hidden" name="csrfmiddlewaretoken" value="QgHSiP1V9gIT4XSwWgg39Rt96ALXzzxlBcFIqs3fiJtHxxyMUPMRaeSz8sPqWAYF">
+        <form action="{% url 'user_login' %}" method="post" id="login-form">
+            {%  csrf_token %}
           <div class="form-row">
 
             <label class="required" for="id_username">Username:</label> <input type="text" name="username" autofocus id="id_username" required>
