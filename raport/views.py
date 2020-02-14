@@ -1,3 +1,5 @@
+from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Count
 from django.views.generic import CreateView, ListView, UpdateView
 from django.shortcuts import render,redirect
 from guru.models import Guru
@@ -11,9 +13,10 @@ from .kkmform import KkmFormset,KkmmapelForm
 class RaportIndexView(ListView):
     model = Raport
 
-class KkmCreateView(CreateView):
+class KkmCreateView(SuccessMessageMixin,CreateView):
     model = KkmMapel
-    success_url = 'raport'
+    success_url = '/raport/kkmmapel/'
+    success_message = "%(mapel)s was created successfully"
     fields = '__all__'
     def get_context_data(self, **kwargs):
         context = super(KkmCreateView,self).get_context_data(**kwargs)
@@ -23,7 +26,7 @@ class KkmCreateView(CreateView):
             guru = get_guru(self.request.user.id)
             form = KkmmapelForm()
             form.fields['mapel'].queryset = Mengajar.objects.filter(guru_id=guru.id)
-            form.fields['kelas'].queryset = Kelas.objects.filter(mengajar__guru_id=1).distinct()
+            form.fields['kelas'].queryset = Kelas.objects.filter(mengajar__guru_id=guru.id).distinct()
             formset = KkmFormset()
             context['kkm_formset'] = formset
             context['form'] = form
@@ -32,11 +35,18 @@ class KkmCreateView(CreateView):
     def form_valid(self, form):
         context = self.get_context_data(form=form)
         formset = context['kkm_formset']
-        if formset.is_valid():
-            response = super().form_valid(form)
-            formset.instance = self.object
-            formset.save()
-            return response
+        if form.is_valid():
+            if formset is not None:
+                if formset.is_valid():
+                    response = super().form_valid(form)
+                    formset.instance = self.object
+                    formset.save()
+
+                    return response
+                else:
+                    return super().form_invalid(form)
+            else:
+                return super().form_invalid(formset)
         else:
             return super().form_invalid(form)
 
@@ -51,9 +61,11 @@ def index(request):
 def kkmmapel(request):
     guru  = get_guru(request.user.id)
     jadwal = get_mengajar(guru)
+    kkm = KkmMapel.objects.filter(mapel__guru_id=guru.id)
     context = {
         'guru': guru,
-        'jadwal': jadwal
+        'jadwal': jadwal,
+        'kkm': kkm
     }
     return render(request,'raport/kkmmapel.html',context)
 
