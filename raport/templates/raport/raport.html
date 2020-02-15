@@ -1,4 +1,69 @@
 {% extends 'base.html' %}
 {% block content %}
-    raport
+    <div id="content-main">
+
+    <div class="module initialized" id="changelist">
+        <div id="toolbar" class="initialized"></div>
+        <div class="clear"></div>
+
+
+        <div class="results" style="margin-bottom: 110px;">
+            {% if messages %}
+                <ul class="messagelist">
+                     {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <table id="result_list">
+                <thead>
+                    <tr>
+                        <th scope="col" class="action-checkbox-column">
+                           <div class="text">
+                               <span>
+                                   <input type="checkbox" id="action-toggle" style="display: inline-block;">
+                                   <label for="action-toggle"></label>
+                               </span>
+                           </div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">Mata Pelajaran</a></div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">Kelas</a></div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">Tahun Ajaran</a></div>
+                           <div class="clear"></div>
+                        </th>
+                    </tr>
+                </thead>
+            <tbody>
+            {% for mengajar in jadwal.all %}
+{#                {% for kkm in mengajar.kkmmapel.all %}#}
+                    <tr class="row1">
+                        <td class="action-checkbox">
+                            <input type="checkbox" name="_selected_action" value="1" class="action-select" id="unique_checkbox_id_0">
+                            <label for="unique_checkbox_id_0"></label>
+                        </td>
+                        <th class="field-mapel nowrap">
+                            <a href="{% if mengajar.kkmmapel.id %}/raport/raport/{{ mengajar.kkmmapel.id }}/{% else %}#{% endif %}">{{ mengajar.mapel.nama_mapel }}</a>
+                        </th>
+                        <td class="field-pengetahuan">{{ mengajar.kelas.nama_kelas }}</td>
+                        <td class="field-pengetahuan">{{ mengajar.tahun.tahun }}</td>
+                    </tr>
+{#                {% endfor %}#}
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        <div class="changelist-footer fixed">
+            <div class="label"><b>{{ kkm.count }}</b> Nilai terisi dari <b>{{ jadwal.count }}</b> Mata pelajaran</div>
+            <div class="cf"></div>
+        </div>
+    </div>
+  </div>
 {% endblock %}

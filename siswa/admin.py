@@ -6,7 +6,7 @@ from raport.models import Raport
 
 class InlineKelas(admin.StackedInline):
     model = Kelas
-class InlineNilai(admin.StackedInline):
+class InlineNilai(admin.TabularInline):
     model = Raport
 # Register your models here.
 class SiswaAdmin(admin.ModelAdmin):

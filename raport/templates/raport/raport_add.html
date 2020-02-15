@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+    {{ mapel }}
+    {{ kkm }}
+    <form action="" method="post" id="raport_form" novalidate="">
+        {%  csrf_token %}
+        <div class="tabular inline-related last-related initialized">
+            <fieldset class="module ">
+               <table>
+                 <thead>
+                 <tr>
+                   <th class="original"></th>
+                     <th class="column-nama required">Nama</th>
+                     <th class="column-tahun required">Tahun Ajaran</th>
+                     <th class="column-kelas required">Kelas</th>
+                     <th class="column-mapel required">Mata Pelajaran</th>
+                     <th class="column-pengetahuan">Pengetahuan</th>
+                     <th class="column-keterampilan">Keterampilan</th>
+                 </tr>
+                 </thead>
+                 <tbody>
+                 {% for murid in siswa %}
+                    <tr class="form-row row1 dynamic-raport_set" id="raport_set-0">
+                        <td class="original">
+                            <input type="hidden" name="mapel[]" value="{{ mapel }}" id="id_raport_set-0-id">
+                            <input type="hidden" name="siswa[]" value="{{ murid.siswa_id }}" id="id_raport_set-0-siswa">
+                            <input type="hidden" name="tahun[]" value="{{ murid.tahun_id }}" id="id_raport_set-0-siswa">
+                            <input type="hidden" name="kelas[]" value="{{ murid.kelas_id }}" id="id_raport_set-0-siswa">
+                        </td>
+                        <td class="field-tahun">
+                              <div class="related-widget-wrapper">
+                                  <input type="text" name="vsiswa" value="{{ murid.siswa.nama }}" id="id_raport_set-0-siswa" class="vTextField" disabled="disabled">
+                              </div>
+                          </td>
+                        <td class="field-tahun">
+                              <div class="related-widget-wrapper">
+                                  <input type="text" name="vtahun" value="{{ murid.tahun }}" id="id_raport_set-0-tahun" class="vTextField" disabled="disabled">
+                              </div>
+                          </td>
+                          <td class="field-kelas">
+                              <div class="related-widget-wrapper">
+                                <input type="text" name="vkelas" value="{{murid.kelas}}" id="id_raport_set-0-kelas" class="vIntegerField" disabled="disabled">
+                              </div>
+                          </td>
+                          <td class="field-mapel">
+                              <div class="related-widget-wrapper">
+                                  <input type="text" name="vmapel" value="{{kkm}}" id="id_raport_set-0-mapel" class="vTextField" disabled="disabled">
+                              </div>
+                          </td>
+                          <td class="field-pengetahuan">
+                              <input type="number" name="pengetahuan[]" id="id_raport_set-0-pengetahuan" class="vIntegerField">
+                          </td>
+                          <td class="field-keterampilan">
+                              <input type="number" name="keterampilan[]" id="id_raport_set-0-keterampilan" class="vIntegerField">
+                          </td>
+                    </tr>
+                 {% endfor %}
+                    </tbody>
+               </table>
+            </fieldset>
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="Save" class="default" name="_save">
+        </div>
+
+    </form>
+    {{ raport }}
+{% endblock %}
+
+
