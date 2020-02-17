@@ -7,8 +7,9 @@ from django.db.models import Q
 from django.forms.models import inlineformset_factory
 from guru.models import Guru
 from mapel.models import KkmMapel,Kelas,Mapel,DescMapel,Mengajar
-from siswa.models import Kelas as KelasSiswa
+from siswa.models import Kelas as KelasSiswa,Siswa
 from raport.models import Raport
+from tahunajaran.models import TahunAjaran
 from .kkmform import KkmFormset,KkmmapelForm
 from .raportform import RaportForm
 import json
@@ -28,38 +29,53 @@ class RaportIndexView(LoginRequiredMixin,ListView):
         }
         return context
 
-class RaportCreateView(FormView):
-    #model = Raport
+class RaportCreateView(CreateView):
+    model = Raport
     template_name = 'raport/raport_add.html'
     slug_field = 'mapel'
     slug_url_kwarg = 'mapel'
+    fields = '__all__'
 
     def get_context_data(self, **kwargs):
+        context = super(RaportCreateView, self).get_context_data(**kwargs)
         kkm = KkmMapel.objects.get(pk=self.kwargs['mapel'])
-        siswa = KelasSiswa.objects.filter(Q(kelas_id=kkm.kelas_id) & Q(tahun_id=kkm.tahun_id))
-        RaportFormset = inlineformset_factory(KkmMapel,Raport,form=RaportForm,min_num=siswa.count(),max_num=siswa.count(),extra=0)
-        init = []
-        for murid in siswa:
-            init.append({'kelas': kkm.kelas_id,'siswa': murid.siswa_id,'mapel': kkm.mapel_id,'tahun': kkm.tahun_id})
+        kelassiswa = KelasSiswa.objects.filter(Q(kelas_id=kkm.kelas_id) & Q(tahun_id=kkm.tahun_id))
+        raportformset = inlineformset_factory(KkmMapel.objects.get(pk=self.kwargs['mapel']),Raport,form=RaportForm,min_num=kelassiswa.count(),fields=['kelas','mapel','siswa','tahun','pengetahuan','keterampilan'],max_num=kelassiswa.count(),extra=0,can_delete=False)
+        if self.request.POST:
+            context['raport'] = raportformset(self.request.POST,instance=kkm)
 
-        #initial=[{'kelas': kkm.kelas_id},{'kelas': kkm.tahun_id},{'kelas': kkm.kelas_id},{'kelas': kkm.kelas_id}]
-        #raportformset = RaportFormSet(initial=init)
-        fromset = RaportFormset(initial=init)
-        #raportformset.extra_forms = len(initial)
-        context = {
-            'mapel': self.kwargs['mapel'],
-            'kkm': kkm,
-            'siswa': siswa,
-            'raport': fromset
-        }
+        else:
+            # init = []
+            # for murid in kelassiswa:
+            #     siswa = Siswa.objects.get(pk= murid.siswa_id)
+            #     tahun = TahunAjaran.objects.get(pk=kkm.tahun_id)
+            #     kelas = Kelas.objects.get(pk=kkm.kelas_id)
+            #     init.append({'lbkelas': kkm.kelas.nama_kelas,'lbnama': murid.siswa.nama,'lbtahun': kkm.tahun.tahun,'lbmapel': kkm.mapel.mapel.nama_mapel,'kelas': kelas,'siswa': siswa,'mapel': kkm.mapel.id,'tahun': tahun})
+            # fromset = raportformset(initial=init)
+            context = {
+                'mapel': self.kwargs['mapel'],
+                'kkm': kkm,
+                'siswa': kelassiswa,
+                'raport': raportformset()
+            }
         return context
-    def post(self, request, *args, **kwargs):
-        context = {
+    #def form_invalid(self, form):
+        #context = self.get_context_data(form=form)
+        #return JsonResponse({'status': 'ok', 'data': context['raport']})
 
-        }
-        return context
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        formset = context['raport']
+        return JsonResponse({'status': 'ok', 'data': formset})
+        if formset.is_valid():
+            response = super().form_valid(form)
 
-
+            formset.instance = self.object
+            formset.save()
+            return JsonResponse({'status':'ok','data': self.object})
+        else:
+            #return super().form_invalid(formset)
+            return JsonResponse({'status': 'ok', 'data': formset})
 
 
 class RaportEditView(UpdateView):
@@ -73,20 +89,39 @@ class KkmUpdateView(LoginRequiredMixin,SuccessMessageMixin,UpdateView):
     fields = '__all__'
     def get_context_data(self, **kwargs):
         context = super(KkmUpdateView,self).get_context_data(**kwargs)
+        siswa = Siswa.objects.filter(kelas__kelas__kkmmapel=self.kwargs['pk'])
+        raportformset = inlineformset_factory(KkmMapel, Raport,
+                                              form=RaportForm, min_num=siswa.count(),max_num=siswa.count(),
+                                              fields=['mapel', 'siswa', 'pengetahuan',
+                                                      'keterampilan'], extra=siswa.count() - 1,
+                                              can_delete=False)
+
         if self.request.POST:
             context['kkm_formset'] = KkmFormset(self.request.POST,instance=self.object)
+            context['raport_formset'] = raportformset(self.request.POST,instance=self.object)
         else:
+            raport = raportformset(instance=self.object)
+            for form in raport:
+                form.fields['siswa'].queryset = siswa
+
+            context['mpk'] = self.kwargs['pk']
             context['kkm_formset'] = KkmFormset(instance=self.object)
+            context['raport_formset'] = raport
+
         return context
     def form_valid(self, form):
         context = self.get_context_data(form=form)
         formset = context['kkm_formset']
+        raportset = context['raport_formset']
         if form.is_valid():
             if formset is not None:
                 if formset.is_valid():
                     response = super().form_valid(form)
                     formset.instance = self.object
                     formset.save()
+                    if raportset.is_valid():
+                        raportset.instance = self.object
+                        raportset.save()
                     return response
                 else:
                     return super().form_invalid(form)
@@ -107,12 +142,15 @@ class KkmCreateView(LoginRequiredMixin,SuccessMessageMixin,CreateView):
             context['kkm_formset'] = KkmFormset(self.request.POST)
         else:
             guru = get_guru(self.request.user.id)
+            kelas = Kelas.objects.filter(mengajar__guru_id=guru.id).distinct()
             form = KkmmapelForm()
             form.fields['mapel'].queryset = Mengajar.objects.filter(guru_id=guru.id)
-            form.fields['kelas'].queryset = Kelas.objects.filter(mengajar__guru_id=guru.id).distinct()
+            form.fields['kelas'].queryset = kelas
             formset = KkmFormset()
+
             context['kkm_formset'] = formset
             context['form'] = form
+            context['mpk'] = self.kwargs
         return context
 
     def form_valid(self, form):

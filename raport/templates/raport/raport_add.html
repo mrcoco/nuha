@@ -4,6 +4,25 @@
     {{ kkm }}
     <form action="" method="post" id="raport_form" novalidate="">
         {%  csrf_token %}
+    {{ form }}
+        {% if raport.errors %}
+                    <!-- Error messaging -->
+                    <div id="errors">
+                        <div class="inner">
+                            <p class="errornote">There were some errors in the information you entered on KKM description. Please correct the following:</p>
+                            <ul>
+                                {% for field in raport %}
+                                    {% if field.errors %}<li class="errornote">{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /Error messaging -->
+                {% endif %}
+        {{ raport.management_form }}
+        {% if raport.non_form_errors %}
+          <div class="alert alertdanger">{{formset.non_form_errors}}</div>
+        {% endif %}
         <div class="tabular inline-related last-related initialized">
             <fieldset class="module ">
                <table>
@@ -19,42 +38,85 @@
                  </tr>
                  </thead>
                  <tbody>
-                 {% for murid in siswa %}
-                    <tr class="form-row row1 dynamic-raport_set" id="raport_set-0">
-                        <td class="original">
-                            <input type="hidden" name="mapel[]" value="{{ mapel }}" id="id_raport_set-0-id">
-                            <input type="hidden" name="siswa[]" value="{{ murid.siswa_id }}" id="id_raport_set-0-siswa">
-                            <input type="hidden" name="tahun[]" value="{{ murid.tahun_id }}" id="id_raport_set-0-siswa">
-                            <input type="hidden" name="kelas[]" value="{{ murid.kelas_id }}" id="id_raport_set-0-siswa">
-                        </td>
-                        <td class="field-tahun">
-                              <div class="related-widget-wrapper">
-                                  <input type="text" name="vsiswa" value="{{ murid.siswa.nama }}" id="id_raport_set-0-siswa" class="vTextField" disabled="disabled">
-                              </div>
-                          </td>
-                        <td class="field-tahun">
-                              <div class="related-widget-wrapper">
-                                  <input type="text" name="vtahun" value="{{ murid.tahun }}" id="id_raport_set-0-tahun" class="vTextField" disabled="disabled">
-                              </div>
-                          </td>
-                          <td class="field-kelas">
-                              <div class="related-widget-wrapper">
-                                <input type="text" name="vkelas" value="{{murid.kelas}}" id="id_raport_set-0-kelas" class="vIntegerField" disabled="disabled">
-                              </div>
-                          </td>
-                          <td class="field-mapel">
-                              <div class="related-widget-wrapper">
-                                  <input type="text" name="vmapel" value="{{kkm}}" id="id_raport_set-0-mapel" class="vTextField" disabled="disabled">
-                              </div>
-                          </td>
-                          <td class="field-pengetahuan">
-                              <input type="number" name="pengetahuan[]" id="id_raport_set-0-pengetahuan" class="vIntegerField">
-                          </td>
-                          <td class="field-keterampilan">
-                              <input type="number" name="keterampilan[]" id="id_raport_set-0-keterampilan" class="vIntegerField">
-                          </td>
-                    </tr>
-                 {% endfor %}
+                 {{ raport }}
+{#                    {% for form in raport %}#}
+{#                        <tr class="form-row row1 dynamic-raport_set" id="raport_set-0">#}
+{#                        <td class="original">#}
+{#                            {{ form.siswa}}#}
+{#                            {{ form.kelas }}#}
+{#                            {{ form.tahun }}#}
+{#                            {{ form.mapel }}#}
+{#                        </td>#}
+{#                            <td class="field-siswa">#}
+{#                              <div class="related-widget-wrapper">#}
+{#                                  {{ form.lbnama }}#}
+{#                              </div>#}
+{#                            </td>#}
+{#                            <td class="field-siswa">#}
+{#                              <div class="related-widget-wrapper">#}
+{#                                  {{ form.lbtahun }}#}
+{#                              </div>#}
+{#                            </td>#}
+{#                            <td class="field-siswa">#}
+{#                              <div class="related-widget-wrapper">#}
+{#                                  {{ form.lbkelas }}#}
+{#                              </div>#}
+{#                            </td>#}
+{##}
+{#                            <td class="field-siswa">#}
+{#                              <div class="related-widget-wrapper">#}
+{#                                  {{ form.lbmapel }}#}
+{#                              </div>#}
+{#                            </td>#}
+{#                            <td class="field-siswa">#}
+{#                                  <div class="related-widget-wrapper">#}
+{#                                      {{ form.pengetahuan }}#}
+{#                                  </div>#}
+{#                            </td>#}
+{#                            <td class="field-siswa">#}
+{#                                  <div class="related-widget-wrapper">#}
+{#                                      {{ form.keterampilan }}#}
+{#                                  </div>#}
+{#                            </td>#}
+{#                        </tr>#}
+{#                    {% endfor %}#}
+
+{#                 {% for murid in siswa %}#}
+{#                    <tr class="form-row row1 dynamic-raport_set" id="raport_set-0">#}
+{#                        <td class="original">#}
+{#                            <input type="hidden" name="mapel[]" value="{{ mapel }}" id="id_raport_set-0-id">#}
+{#                            <input type="hidden" name="siswa[]" value="{{ murid.siswa_id }}" id="id_raport_set-0-siswa">#}
+{#                            <input type="hidden" name="tahun[]" value="{{ murid.tahun_id }}" id="id_raport_set-0-siswa">#}
+{#                            <input type="hidden" name="kelas[]" value="{{ murid.kelas_id }}" id="id_raport_set-0-siswa">#}
+{#                        </td>#}
+{#                        <td class="field-tahun">#}
+{#                              <div class="related-widget-wrapper">#}
+{#                                  <input type="text" name="vsiswa" value="{{ murid.siswa.nama }}" id="id_raport_set-0-siswa" class="vTextField" disabled="disabled">#}
+{#                              </div>#}
+{#                          </td>#}
+{#                        <td class="field-tahun">#}
+{#                              <div class="related-widget-wrapper">#}
+{#                                  <input type="text" name="vtahun" value="{{ murid.tahun }}" id="id_raport_set-0-tahun" class="vTextField" disabled="disabled">#}
+{#                              </div>#}
+{#                          </td>#}
+{#                          <td class="field-kelas">#}
+{#                              <div class="related-widget-wrapper">#}
+{#                                <input type="text" name="vkelas" value="{{murid.kelas}}" id="id_raport_set-0-kelas" class="vIntegerField" disabled="disabled">#}
+{#                              </div>#}
+{#                          </td>#}
+{#                          <td class="field-mapel">#}
+{#                              <div class="related-widget-wrapper">#}
+{#                                  <input type="text" name="vmapel" value="{{kkm}}" id="id_raport_set-0-mapel" class="vTextField" disabled="disabled">#}
+{#                              </div>#}
+{#                          </td>#}
+{#                          <td class="field-pengetahuan">#}
+{#                              <input type="number" name="pengetahuan[]" id="id_raport_set-0-pengetahuan" class="vIntegerField">#}
+{#                          </td>#}
+{#                          <td class="field-keterampilan">#}
+{#                              <input type="number" name="keterampilan[]" id="id_raport_set-0-keterampilan" class="vIntegerField">#}
+{#                          </td>#}
+{#                    </tr>#}
+{#                 {% endfor %}#}
                     </tbody>
                </table>
             </fieldset>
@@ -64,7 +126,7 @@
         </div>
 
     </form>
-    {{ raport }}
+
 {% endblock %}
 
 

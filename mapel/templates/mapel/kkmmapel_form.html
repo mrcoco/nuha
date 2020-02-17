@@ -8,6 +8,11 @@
             <a href="/raport/kkmmapel/add#/tab/module_1/" class="changeform-navigation-button segmented-button right " title="">
                 <span class="changeform-navigation-button-icon right icon-arrow-right"></span><span class="changeform-navigation-button-label">Deskripsi KKM</span>
             </a>
+            {% if raport_formset %}
+             <a href="/raport/kkmmapel/{{mpk}}#/tab/module_2/" class="changeform-navigation-button segmented-button right " title="">
+                <span class="changeform-navigation-button-icon right icon-arrow-right"></span><span class="changeform-navigation-button-label">Raport</span>
+            </a>
+            {% endif %}
         </div>
         <ul class="object-tools initialized">
             <li>
@@ -98,7 +103,6 @@
               <h3><b>Desc mapel:</b>&nbsp;<span class="inline_label">#{{ form.predikat.id.auto_id }}</span>
               </h3>
             <fieldset class="module aligned ">
-
                 <div class="form-row field-predikat">
                     <div>
                         <label for="{{ form.predikat.id_for_label }}">{{ form.predikat.label_tag }}</label>
@@ -106,7 +110,7 @@
                         {{ form.id }}
                     </div>
                 </div>
-                    <div class="form-row field-predikat">
+                <div class="form-row field-predikat">
                     <div>
                         <label for="{{ form.pengetahuan.id_for_label }}">{{ form.pengetahuan.label_tag }}</label>
                         {{ form.pengetahuan }}
@@ -123,6 +127,41 @@
             </div>
                 {% endfor %}
             </fieldset>
+            {% if raport_formset %}
+                {{ raport_formset.management_form }}
+                <fieldset class="module">
+            <div class="tabular inline-related last-related initialized">
+            <fieldset class="module aligned">
+            <table>
+                 <thead>
+                 <tr>
+                    <th class="column-siswa required">Siswa</th>
+                    <th class="column-pengetahuan">Pengetahuan</th>
+                    <th class="column-keterampilan">Keterampilan</th>
+                 </tr>
+                 </thead>
+                <tbody>
+                {% for form in raport_formset %}
+                    <tr class="form-row row1 dynamic-raport_set" id="raport_set-0">
+                        <td class="field-siswa">
+                            <div class="related-widget-wrapper">
+                                {{ form.siswa }}
+                            </div>
+                        </td>
+                        <td class="field-pengetahuan">
+                            {{form.pengetahuan}}
+                        </td>
+                        <td class="field-keterampilan">
+                            {{form.keterampilan}}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </fieldset>
+            </div>
+                </fieldset>
+            {% endif %}
 
                 <div class="submit-row">
                     <input type="submit" value="Save" class="default" name="_save">
