@@ -39,6 +39,10 @@
                            <div class="text"><a href="#">Tahun Ajaran</a></div>
                            <div class="clear"></div>
                         </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">Status Raport</a></div>
+                           <div class="clear"></div>
+                        </th>
                     </tr>
                 </thead>
             <tbody>
@@ -52,8 +56,19 @@
                         <th class="field-mapel nowrap">
                             <a href="{% if mengajar.kkmmapel.id %}/raport/kkmmapel/{{ mengajar.kkmmapel.id }}/#/tab/module_2/{% else %}#{% endif %}">{{ mengajar.mapel.nama_mapel }}</a>
                         </th>
-                        <td class="field-pengetahuan">{{ mengajar.kelas.nama_kelas }}</td>
-                        <td class="field-pengetahuan">{{ mengajar.tahun.tahun }}</td>
+                        <td class="field-kelas">{{ mengajar.kelas.nama_kelas }}</td>
+                        <td class="field-tahun">{{ mengajar.tahun.tahun }}</td>
+                        <td class="field-raport">
+                            {% if mengajar.kkmmapel.raport_set.count  %}
+                                {{ mengajar.kkmmapel.raport_set.count }} Nilai Terisi
+                            {% else %}
+                                {% if mengajar.kkmmapel.id %}
+                                    Nilai Belum Terisi
+                                    {% else %}
+                                    KKM Belum terisi
+                                {% endif %}
+                            {% endif%}
+                        </td>
                     </tr>
 {#                {% endfor %}#}
             {% endfor %}
@@ -61,7 +76,7 @@
             </table>
         </div>
         <div class="changelist-footer fixed">
-            <div class="label"><b>{{ kkm.count }}</b> Nilai terisi dari <b>{{ jadwal.count }}</b> Mata pelajaran</div>
+            <div class="label"><b>{{ jadwal.kkm_set.count }}</b> Nilai terisi dari <b>{{ jadwal.count }}</b> Mata pelajaran</div>
             <div class="cf"></div>
         </div>
     </div>

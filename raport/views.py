@@ -1,6 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse, request, HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView,FormView,View
 from django.shortcuts import render,redirect
 from django.db.models import Q
@@ -85,6 +87,7 @@ class KkmUpdateView(LoginRequiredMixin,SuccessMessageMixin,UpdateView):
     model = KkmMapel
     login_url = '/login/'
     success_url = '/raport/kkmmapel/'
+    success_raport_url = '/raport/raport/'
     success_message = "%(mapel)s was Updated successfully"
     fields = '__all__'
     def get_context_data(self, **kwargs):
@@ -122,7 +125,12 @@ class KkmUpdateView(LoginRequiredMixin,SuccessMessageMixin,UpdateView):
                     if raportset.is_valid():
                         raportset.instance = self.object
                         raportset.save()
-                    return response
+                        #messages.success(request, 'Thank you')
+                        return HttpResponseRedirect('/raport/raport')
+
+                        #return response
+                    else:
+                        return super().form_invalid(raportset)
                 else:
                     return super().form_invalid(form)
             else:

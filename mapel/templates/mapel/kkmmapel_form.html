@@ -135,14 +135,18 @@
             <table>
                  <thead>
                  <tr>
-                    <th class="column-siswa required">Siswa</th>
-                    <th class="column-pengetahuan">Pengetahuan</th>
-                    <th class="column-keterampilan">Keterampilan</th>
+                     <th class="original"></th>
+                     <th class="column-siswa required">Siswa</th>
+                     <th class="column-pengetahuan">Pengetahuan</th>
+                     <th class="column-keterampilan">Keterampilan</th>
                  </tr>
                  </thead>
                 <tbody>
                 {% for form in raport_formset %}
                     <tr class="form-row row1 dynamic-raport_set" id="raport_set-0">
+                        <td class="original">
+                            {{ form.id }}
+                        </td>
                         <td class="field-siswa">
                             <div class="related-widget-wrapper">
                                 {{ form.siswa }}
