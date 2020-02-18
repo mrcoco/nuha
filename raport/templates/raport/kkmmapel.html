@@ -63,12 +63,23 @@
                             <label for="unique_checkbox_id_0"></label>
                         </td>
                         <th class="field-mapel nowrap">
-                            <a href="{% if mengajar.kkmmapel.id %}/raport/kkmmapel/{{ mengajar.kkmmapel.id }}/{% else %}#{% endif %}">{{ mengajar.mapel.nama_mapel }}</a>
+                            <a href="{% if mengajar.kkmmapel.id %}/raport/kkmmapel/{{ mengajar.kkmmapel.id }}/{% else %}/raport/kkmmapel/add{% endif %}">{{ mengajar.mapel.nama_mapel }}</a>
                         </th>
                         <td class="field-pengetahuan">{{ mengajar.kelas.nama_kelas }}</td>
                         <td class="field-pengetahuan">{{ mengajar.tahun.tahun }}</td>
-                        <td class="field-pengetahuan"><b>{% if mengajar.kkmmapel.pengetahuan %}{{ mengajar.kkmmapel.pengetahuan }}{% else %} Belum Ada Nilai{% endif %}</b></td>
-                        <td class="field-ketrampilan"><b>{% if mengajar.kkmmapel.ketrampilan %}{{ mengajar.kkmmapel.ketrampilan }}{% else %}Belum Ada Nilai{% endif %}</b></td>
+                        <td class="field-pengetahuan">
+                            <b>{% if mengajar.kkmmapel.pengetahuan %}{{ mengajar.kkmmapel.pengetahuan }}
+                            {% else %}
+                                <img src="/static/admin/img/icon-no.svg" alt="False">
+                                Belum Ada Nilai
+                            {% endif %}</b>
+                        </td>
+                        <td class="field-ketrampilan">
+                            <b>{% if mengajar.kkmmapel.ketrampilan %}{{ mengajar.kkmmapel.ketrampilan }}
+                            {% else %}
+                                <img src="/static/admin/img/icon-no.svg" alt="False">
+                                Belum Ada Nilai
+                            {% endif %}</b></td>
                     </tr>
 {#                {% endfor %}#}
             {% endfor %}

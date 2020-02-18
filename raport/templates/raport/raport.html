@@ -40,28 +40,34 @@
                            <div class="clear"></div>
                         </th>
                         <th scope="col" class="sortable column-mapel">
-                           <div class="text"><a href="#">Status Raport</a></div>
+                           <div class="text"><a href="#">Status Nilai</a></div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">AKSI</a></div>
                            <div class="clear"></div>
                         </th>
                     </tr>
                 </thead>
             <tbody>
             {% for mengajar in jadwal.all %}
-{#                {% for kkm in mengajar.kkmmapel.all %}#}
                     <tr class="row1">
                         <td class="action-checkbox">
                             <input type="checkbox" name="_selected_action" value="1" class="action-select" id="unique_checkbox_id_0">
                             <label for="unique_checkbox_id_0"></label>
                         </td>
                         <th class="field-mapel nowrap">
-                            <a href="{% if mengajar.kkmmapel.id %}/raport/kkmmapel/{{ mengajar.kkmmapel.id }}/#/tab/module_2/{% else %}#{% endif %}">{{ mengajar.mapel.nama_mapel }}</a>
+                            <a href="{% if mengajar.kkmmapel.id %}/raport/kkmmapel/{{ mengajar.kkmmapel.id }}/#/tab/module_2/{% else %}/raport/kkmmapel/add{% endif %}">{{ mengajar.mapel.nama_mapel }}</a>
                         </th>
                         <td class="field-kelas">{{ mengajar.kelas.nama_kelas }}</td>
                         <td class="field-tahun">{{ mengajar.tahun.tahun }}</td>
                         <td class="field-raport">
                             {% if mengajar.kkmmapel.raport_set.count  %}
-                                {{ mengajar.kkmmapel.raport_set.count }} Nilai Terisi
+                                <img src="/static/admin/img/icon-yes.svg" alt="True">
+                                {{ mengajar.kkmmapel.raport_set.count }}
+                                Nilai Terisi
                             {% else %}
+                                <img src="/static/admin/img/icon-no.svg" alt="False">
                                 {% if mengajar.kkmmapel.id %}
                                     Nilai Belum Terisi
                                     {% else %}
@@ -69,14 +75,23 @@
                                 {% endif %}
                             {% endif%}
                         </td>
+                        <td class="field-aksi">
+                            {% if mengajar.kkmmapel.raport_set.count %}
+                                <a href="/raport/raport/{{ mengajar.kkmmapel.id }}/detail">tampil</a> |
+                                <a href="/raport/raport/{{ mengajar.kkmmapel.id }}/download">download excel</a> |
+                                <a href="/raport/raport/{{ mengajar.kkmmapel.id }}/print">print</a>
+                                {% else %}
+                                <img src="/static/admin/img/icon-alert.svg" alt="False">
+                            {% endif %}
+
+                        </td>
                     </tr>
-{#                {% endfor %}#}
             {% endfor %}
             </tbody>
             </table>
         </div>
         <div class="changelist-footer fixed">
-            <div class="label"><b>{{ jadwal.kkm_set.count }}</b> Nilai terisi dari <b>{{ jadwal.count }}</b> Mata pelajaran</div>
+            <div class="label"><b>{{ jadwal.count }}</b> Mata pelajaran</div>
             <div class="cf"></div>
         </div>
     </div>
