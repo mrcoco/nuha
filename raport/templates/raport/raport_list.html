@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+    <section class="sheet padding-20mm">
+    <h1 align="center">REKAPITULASI NILAI PENGETAHUAN DAN KETERAMPILAN</h1>
+    <table style="margin-bottom: 5px">
+    <tr>
+        <td>Mata Pelajaran</td><td>: {{ nama_mapel }}</td><td colspan="3" width="200mm"></td><td>Guru Mata Pelajaran</td><td>: {{ guru }}</td>
+    </tr>
+    <tr>
+        <td>Kelas/Semesetar</td><td>: {{ kelas }}</td><td colspan="3" width="200mm"></td><td>Tahun Pelajaran</td><td>: {{ tahun }}</td>
+    </tr>
+    </table>
+    <table id="tabel">
+        <thead>
+            <tr>
+                <th rowspan="2">No</th>
+                <th rowspan="2" width="10%">NIS</th>
+                <th rowspan="2" width="10%">NAMA PESERTA DIDIK</th>
+                <th colspan="3">NILAI PENGETAHUAN</th>
+                <th colspan="3">NILAI KETERAMPILAN</th>
+            </tr>
+            <tr>
+                <th width="6.5%">ANGKA</th>
+                <th width="7.5%">PREDIKAT</th>
+                <th width="25%">DESKRIPSI</th>
+                <th width="6.5%">ANGKA</th>
+                <th width="7.5%">PREDIKAT</th>
+                <th width="25%">DESKRIPSI</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ni in nilai %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td width="10%">{{ ni.nis }}</td>
+                <td width="10%">{{ ni.siswa }}</td>
+                <td align="center" width="6%">{{ ni.angka_pengetahuan }}</td>
+                <td align="center" width="7.5%">{{ ni.predikat_pengetahuan }}</td>
+                <td width="25%">{{ ni.desc_pengetahuan }}</td>
+                <td align="center" width="6%">{{ ni.angka_keterampilan }}</td>
+                <td align="center" width="7.5%">{{ ni.predikat_keterampilan }}</td>
+                <td width="25%">{{ ni.desc_keterampilan }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </section>
+{% endblock %}

@@ -106,6 +106,22 @@ class RaportDownloadView(View):
 
 class RaportDetailView(ListView):
     model = Raport
+    def get_context_data(self, **kwargs):
+        context = super(RaportDetailView, self).get_context_data(**kwargs)
+        kkm = KkmMapel.objects.get(pk=self.kwargs['pk'])
+        guru = kkm.mapel.guru.nama
+        nama_mapel = kkm.mapel.mapel.nama_mapel
+        tahun = kkm.tahun.tahun
+        kelas = kkm.kelas.nama_kelas
+        nilai = kkm.raport_set.all()
+        rekap_list = get_rekap(kkm, nilai)
+        context['tahun'] = tahun
+        context['kelas'] = kelas
+        context['mypk'] = self.kwargs['pk']
+        context['guru'] = guru
+        context['nama_mapel'] = nama_mapel
+        context['nilai'] = rekap_list
+        return context
 
 class RaportPrintView(View):
     model = Raport
@@ -120,18 +136,7 @@ class RaportPrintView(View):
         tahun = kkm.tahun.tahun
         kelas = kkm.kelas.nama_kelas
         nilai = kkm.raport_set.all()
-        rekap_list = []
-        for ni in nilai:
-            rekap = {}
-            rekap['nis'] = ni.siswa.nis
-            rekap['siswa'] = ni.siswa.nama
-            rekap['angka_pengetahuan'] = ni.pengetahuan
-            rekap['angka_keterampilan'] = ni.keterampilan
-            rekap['predikat_pengetahuan'] = get_predikat(kkm.pengetahuan,ni.pengetahuan)
-            rekap['predikat_keterampilan'] = get_predikat(kkm.ketrampilan,ni.keterampilan)
-            rekap['desc_pengetahuan'] = kkm.descmapel_set.get(predikat=get_predikat(kkm.pengetahuan,ni.pengetahuan)).pengetahuan
-            rekap['desc_keterampilan'] = kkm.descmapel_set.get(predikat=get_predikat(kkm.ketrampilan,ni.keterampilan)).ketrampilan
-            rekap_list.append(rekap)
+        rekap_list = get_rekap(kkm, nilai)
         # context['tahun'] = tahun
         # context['kelas'] = kelas
         # context['mypk'] = self.kwargs['pk']
@@ -310,3 +315,20 @@ def get_predikat(kkm, nilai):
     else:
         predikat = "E"
     return predikat
+
+def get_rekap(kkm, nilai):
+    rekap_list = []
+    for ni in nilai:
+        rekap = {}
+        rekap['nis'] = ni.siswa.nis
+        rekap['siswa'] = ni.siswa.nama
+        rekap['angka_pengetahuan'] = ni.pengetahuan
+        rekap['angka_keterampilan'] = ni.keterampilan
+        rekap['predikat_pengetahuan'] = get_predikat(kkm.pengetahuan, ni.pengetahuan)
+        rekap['predikat_keterampilan'] = get_predikat(kkm.ketrampilan, ni.keterampilan)
+        rekap['desc_pengetahuan'] = kkm.descmapel_set.get(
+            predikat=get_predikat(kkm.pengetahuan, ni.pengetahuan)).pengetahuan
+        rekap['desc_keterampilan'] = kkm.descmapel_set.get(
+            predikat=get_predikat(kkm.ketrampilan, ni.keterampilan)).ketrampilan
+        rekap_list.append(rekap)
+    return rekap_list
