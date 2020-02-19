@@ -1,13 +1,10 @@
-from datetime import datetime
-
+import io
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import CreateView, ListView, UpdateView, View
-from django.shortcuts import render,redirect
-from django.db.models import Q
 from django.forms.models import inlineformset_factory
-from openpyxl import Workbook
+
 from guru.models import Guru
 from mapel.models import KkmMapel,Kelas,Mapel,DescMapel,Mengajar
 from siswa.models import Kelas as KelasSiswa,Siswa
@@ -15,10 +12,10 @@ from raport.models import Raport
 from .kkmform import KkmFormset,KkmmapelForm
 from .raportform import RaportForm
 from .render import Render
+import xlsxwriter
 
 
 # Create your views here.
-
 class RaportIndexView(LoginRequiredMixin,ListView):
     model = Raport
     login_url = '/login/'
@@ -28,83 +25,82 @@ class RaportIndexView(LoginRequiredMixin,ListView):
         jadwal = get_mengajar(guru)
         context = {
             'jadwal': jadwal,
-            'title': 'Rapot siswa'
+            'title': 'Nilai siswa'
         }
         return context
 
-class RaportCreateView(CreateView):
+class RaportDownloadView(LoginRequiredMixin,View):
     model = Raport
-    template_name = 'raport/raport_add.html'
-    slug_field = 'mapel'
-    slug_url_kwarg = 'mapel'
-    fields = '__all__'
 
-    def get_context_data(self, **kwargs):
-        context = super(RaportCreateView, self).get_context_data(**kwargs)
-        kkm = KkmMapel.objects.get(pk=self.kwargs['mapel'])
-        kelassiswa = KelasSiswa.objects.filter(Q(kelas_id=kkm.kelas_id) & Q(tahun_id=kkm.tahun_id))
-        raportformset = inlineformset_factory(KkmMapel.objects.get(pk=self.kwargs['mapel']),Raport,form=RaportForm,min_num=kelassiswa.count(),fields=['kelas','mapel','siswa','tahun','pengetahuan','keterampilan'],max_num=kelassiswa.count(),extra=0,can_delete=False)
-        if self.request.POST:
-            context['raport'] = raportformset(self.request.POST,instance=kkm)
+    def get(self,request, pk):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output)
+        worksheet = workbook.add_worksheet()
 
-        else:
-            # init = []
-            # for murid in kelassiswa:
-            #     siswa = Siswa.objects.get(pk= murid.siswa_id)
-            #     tahun = TahunAjaran.objects.get(pk=kkm.tahun_id)
-            #     kelas = Kelas.objects.get(pk=kkm.kelas_id)
-            #     init.append({'lbkelas': kkm.kelas.nama_kelas,'lbnama': murid.siswa.nama,'lbtahun': kkm.tahun.tahun,'lbmapel': kkm.mapel.mapel.nama_mapel,'kelas': kelas,'siswa': siswa,'mapel': kkm.mapel.id,'tahun': tahun})
-            # fromset = raportformset(initial=init)
-            context = {
-                'mapel': self.kwargs['mapel'],
-                'kkm': kkm,
-                'siswa': kelassiswa,
-                'raport': raportformset()
-            }
-        return context
-    #def form_invalid(self, form):
-        #context = self.get_context_data(form=form)
-        #return JsonResponse({'status': 'ok', 'data': context['raport']})
+        kkm = KkmMapel.objects.get(pk=pk)
+        guru = kkm.mapel.guru.nama
+        nama_mapel = kkm.mapel.mapel.nama_mapel
+        tahun = kkm.tahun.tahun
+        kelas = kkm.kelas.nama_kelas
+        nilai = kkm.raport_set.all()
+        cell_format = workbook.add_format({'align': 'center','valign': 'vcenter','border': 1})
+        cell_format.set_text_wrap()
 
-    def form_valid(self, form):
-        context = self.get_context_data(form=form)
-        formset = context['raport']
-        return JsonResponse({'status': 'ok', 'data': formset})
-        if formset.is_valid():
-            response = super().form_valid(form)
+        worksheet.write('A1', 'Mata Pelajaran')
+        worksheet.write('B1', nama_mapel)
+        worksheet.write('H1', 'Guru Mata Pelajaran')
+        worksheet.write('I1', guru)
+        worksheet.write('A2', 'Kelas/Semester')
+        worksheet.write('B2', kelas)
+        worksheet.write('H2', 'Tahun Pelajaran')
+        worksheet.write('H2', tahun)
+        worksheet.set_column('B:B', 15)
+        worksheet.set_column('C:C', 15)
+        worksheet.set_column('F:F', 25)
+        worksheet.set_column('I:B', 25)
+        worksheet.merge_range('D4:F4','NILAI PENGETAHUAN',cell_format)
+        worksheet.merge_range('G4:I4','NILAI KETERAMPILAN',cell_format)
+        worksheet.merge_range('A4:A5','No',cell_format)
+        worksheet.merge_range('B4:B5','NIS',cell_format)
+        worksheet.merge_range('C4:C5','NAMA PESERTA DIDIK',cell_format)
+        worksheet.write('D5', 'ANGKA',cell_format)
+        worksheet.write('E5', 'PREDIKAT',cell_format)
+        worksheet.write('F5', 'DESKRIPSI',cell_format)
+        worksheet.write('G5', 'ANGKA',cell_format)
+        worksheet.write('H5', 'PREDIKAT',cell_format)
+        worksheet.write('I5', 'DESKRIPSI',cell_format)
+        row = 5
+        num = 1
+        for ni in nilai:
+            worksheet.write(row, 0, num,cell_format)
+            worksheet.write(row, 1, ni.siswa.nis,cell_format)
+            worksheet.write(row, 2, ni.siswa.nama,cell_format)
+            worksheet.write(row, 3, ni.pengetahuan,cell_format)
+            worksheet.write(row, 4, get_predikat(kkm.pengetahuan, ni.pengetahuan),cell_format)
+            worksheet.write(row, 5, kkm.descmapel_set.get(predikat=get_predikat(kkm.pengetahuan, ni.pengetahuan)).pengetahuan,cell_format)
+            worksheet.write(row, 6, ni.keterampilan,cell_format)
+            worksheet.write(row, 7, get_predikat(kkm.ketrampilan, ni.keterampilan),cell_format)
+            worksheet.write(row, 8, kkm.descmapel_set.get(predikat=get_predikat(kkm.ketrampilan, ni.keterampilan)).ketrampilan,cell_format)
+            row +=1
+            num +=1
 
-            formset.instance = self.object
-            formset.save()
-            return JsonResponse({'status':'ok','data': self.object})
-        else:
-            #return super().form_invalid(formset)
-            return JsonResponse({'status': 'ok', 'data': formset})
+        # Close the workbook before sending the data.
+        workbook.close()
 
+        # Rewind the buffer.
+        output.seek(0)
 
-class RaportDownloadView(View):
-    model = Raport
-    def get(self, request, *args, **kwargs):
+        # Set up the Http response.
+        filename = 'Rekap_nilai.xlsx'
         response = HttpResponse(
-            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            output,
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
-        response['Content-Disposition'] = 'attachment; filename={date}-movies.xlsx'.format(
-            date=datetime.now().strftime('%Y-%m-%d'),
-        )
-        kkm = get_kkm(self.kwargs['pk'])
-        workbook = Workbook
-        worksheet = workbook.active
-        #worksheet.title = 'Rekap Nilai'
-        columns = ['No','NIS','NAMA PESERTA DIDIK','ANGKA','PREDIKAT','DESKRIPSI','ANGKA','PREDIKAT','DESKRIPSI']
-        row_num = 1
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
 
-        # Assign the titles for each cell of the header
-        for col_num, column_title in enumerate(columns, 1):
-            cell = worksheet.cell(row=row_num, column=col_num)
-            cell.value = column_title
-        workbook.save(response)
         return response
 
-class RaportDetailView(ListView):
+class RaportDetailView(LoginRequiredMixin,ListView):
     model = Raport
     def get_context_data(self, **kwargs):
         context = super(RaportDetailView, self).get_context_data(**kwargs)
@@ -123,13 +119,11 @@ class RaportDetailView(ListView):
         context['nilai'] = rekap_list
         return context
 
-class RaportPrintView(View):
+class RaportPrintView(LoginRequiredMixin,View):
     model = Raport
     template_name = 'raport/raport_print.html'
 
     def get(self,request, pk):
-        #context = super(RaportPrintView, self).get_context_data(**kwargs)
-        #kkm = KkmMapel.objects.get(pk=self.kwargs['pk'])
         kkm = KkmMapel.objects.get(pk=pk)
         guru = kkm.mapel.guru.nama
         nama_mapel = kkm.mapel.mapel.nama_mapel
@@ -137,12 +131,6 @@ class RaportPrintView(View):
         kelas = kkm.kelas.nama_kelas
         nilai = kkm.raport_set.all()
         rekap_list = get_rekap(kkm, nilai)
-        # context['tahun'] = tahun
-        # context['kelas'] = kelas
-        # context['mypk'] = self.kwargs['pk']
-        # context['guru'] = guru
-        # context['nama_mapel'] = nama_mapel
-        # context['nilai'] = rekap_list
         parrams = {
             'tahun': tahun,
             'kelas': kelas,
@@ -273,28 +261,18 @@ class MengajarListView(LoginRequiredMixin,ListView):
         }
         return context
 
-def index(request):
-    if not request.user.is_authenticated:
-        return redirect('user_login')
-    context = {
-
-    }
-    return render(request,'raport/index.html',context)
-
-def get_login(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
+class RaportView(LoginRequiredMixin,ListView):
+    model = Raport
+    template_name = 'raport/index.html'
 
 def get_guru(userid):
     return Guru.objects.get(user=userid)
+
 def get_kkm(id):
     return KkmMapel.objects.filter(mapel_id=id)
 
 def get_mengajar(guru):
     return Mengajar.objects.filter(guru_id=guru.id)
-
-def get_kkmdes(predikat):
-    pass
 
 def get_predikat(kkm, nilai):
     nilaimax = 100

@@ -17,7 +17,7 @@ class Raport(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name_plural = "Raport"
+        verbose_name_plural = "Nilai Siswa"
 
     def __str__(self):
         return "%s - %s"%(self.siswa,self.mapel.mapel)
