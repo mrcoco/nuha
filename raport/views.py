@@ -14,6 +14,7 @@ from siswa.models import Kelas as KelasSiswa,Siswa
 from raport.models import Raport
 from .kkmform import KkmFormset,KkmmapelForm
 from .raportform import RaportForm
+from .render import Render
 
 
 # Create your views here.
@@ -106,12 +107,14 @@ class RaportDownloadView(View):
 class RaportDetailView(ListView):
     model = Raport
 
-class RaportPrintView(ListView):
+class RaportPrintView(View):
     model = Raport
     template_name = 'raport/raport_print.html'
-    def get_context_data(self, **kwargs):
-        context = super(RaportPrintView, self).get_context_data(**kwargs)
-        kkm = KkmMapel.objects.get(pk=self.kwargs['pk'])
+
+    def get(self,request, pk):
+        #context = super(RaportPrintView, self).get_context_data(**kwargs)
+        #kkm = KkmMapel.objects.get(pk=self.kwargs['pk'])
+        kkm = KkmMapel.objects.get(pk=pk)
         guru = kkm.mapel.guru.nama
         nama_mapel = kkm.mapel.mapel.nama_mapel
         tahun = kkm.tahun.tahun
@@ -129,13 +132,22 @@ class RaportPrintView(ListView):
             rekap['desc_pengetahuan'] = kkm.descmapel_set.get(predikat=get_predikat(kkm.pengetahuan,ni.pengetahuan)).pengetahuan
             rekap['desc_keterampilan'] = kkm.descmapel_set.get(predikat=get_predikat(kkm.ketrampilan,ni.keterampilan)).ketrampilan
             rekap_list.append(rekap)
-        context['tahun'] = tahun
-        context['kelas'] = kelas
-        context['mypk'] = self.kwargs['pk']
-        context['guru'] = guru
-        context['nama_mapel'] = nama_mapel
-        context['nilai'] = rekap_list
-        return context
+        # context['tahun'] = tahun
+        # context['kelas'] = kelas
+        # context['mypk'] = self.kwargs['pk']
+        # context['guru'] = guru
+        # context['nama_mapel'] = nama_mapel
+        # context['nilai'] = rekap_list
+        parrams = {
+            'tahun': tahun,
+            'kelas': kelas,
+            'mypk' : pk,
+            'guru' : guru,
+            'nama_mapel': nama_mapel,
+            'nilai': rekap_list,
+            'request': request
+        }
+        return Render.render('raport/raport_print.html',parrams)
 
 class KkmUpdateView(LoginRequiredMixin,SuccessMessageMixin,UpdateView):
     model = KkmMapel
