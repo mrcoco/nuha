@@ -291,10 +291,95 @@ class RaportSiswaView(LoginRequiredMixin,ListView):
         return context
 
 class RaportSiswaDownload(LoginRequiredMixin,View):
-    pass
+    def get(self,request, siswa,kelas,tahun):
+        datasiswa = KelasSiswa.objects.get(Q(siswa_id=siswa) & Q(tahun_id=tahun) & Q(kelas_id=kelas))
+        raport = Raport.objects.filter(Q(siswa_id=siswa) & Q(mapel__tahun_id=tahun) & Q(mapel__kelas_id=kelas))
+        rekap_list = raport_list(raport)
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output)
+        worksheet = workbook.add_worksheet()
+        cell_format = workbook.add_format({'align': 'center', 'valign': 'vcenter', 'border': 1})
+        cell_format.set_text_wrap()
+        worksheet.set_column('B:B', 25)
+        worksheet.set_column('F:F', 25)
+        worksheet.set_column('J:J', 25)
+        worksheet.write('A1', 'Nama Sekolah')
+        worksheet.write('A2','Alamat')
+        worksheet.write('A3','Nama Siswa')
+        worksheet.write('A4','Nomor Induk/ NISN')
+        worksheet.write('C1', "SMK Ma'arif Nurul ")
+        worksheet.write('C2', 'Taruban Kulon, Tuksono, Sentolo, Kulon Progo, Yogyakarta 55664')
+        worksheet.write('C3', datasiswa.siswa.nama)
+        worksheet.write('C4', datasiswa.siswa.nis)
+        worksheet.write('H1', 'Kelas')
+        worksheet.write('H2', 'SMT')
+        worksheet.write('H3', 'Tahun')
+        worksheet.write('J1', datasiswa.kelas.nama_kelas)
+        worksheet.write('J2', 'SMT')
+        worksheet.write('J3', datasiswa.tahun.tahun)
+
+        worksheet.merge_range('A15:A16','NO',cell_format)
+        worksheet.merge_range('B15:B16', 'Mata Pelajaran', cell_format)
+        worksheet.merge_range('C15:F15', 'Pengetahuan', cell_format)
+        worksheet.merge_range('G15:J15', 'Keterampilan', cell_format)
+        worksheet.merge_range('A17:J17', 'Keterampilan', cell_format)
+        worksheet.write('C16', 'KKM', cell_format)
+        worksheet.write('D16', 'Angka', cell_format)
+        worksheet.write('E16', 'Predikat', cell_format)
+        worksheet.write('F16', 'Deskripsi', cell_format)
+        worksheet.write('G16', 'KKM', cell_format)
+        worksheet.write('H16', 'Angka', cell_format)
+        worksheet.write('I16', 'Predikat', cell_format)
+        worksheet.write('J16', 'Deskripsi', cell_format)
+        worksheet.write('A17', 'Muatan Nasional', cell_format)
+        row = 18
+        num = 1
+        for nilai in rekap_list:
+            worksheet.write(row, 0, num, cell_format)
+            worksheet.write(row, 1, nilai['mapel'], cell_format)
+            worksheet.write(row, 2, nilai['kkm_pengetahuan'], cell_format)
+            worksheet.write(row, 3, nilai['angka_pengetahuan'], cell_format)
+            worksheet.write(row, 4, nilai['predikat_pengetahuan'], cell_format)
+            worksheet.write(row, 5, nilai['desc_pengetahuan'], cell_format)
+            worksheet.write(row, 6, nilai['kkm_keterampilan'], cell_format)
+            worksheet.write(row, 7, nilai['angka_keterampilan'], cell_format)
+            worksheet.write(row, 8, nilai['predikat_keterampilan'], cell_format)
+            worksheet.write(row, 9, nilai['desc_keterampilan'], cell_format)
+            row += 1
+            num += 1
+
+        # Close the workbook before sending the data.
+        workbook.close()
+
+        # Rewind the buffer.
+        output.seek(0)
+
+        # Set up the Http response.
+        filename = 'nilai_raport.xlsx'
+        response = HttpResponse(
+            output,
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
+        return response
 
 class RaportSiswaPrint(LoginRequiredMixin,View):
-    pass
+    #template_name = 'raport/raport_siswa_print.html'
+    def get(self,request,siswa,kelas,tahun):
+        datasiswa = KelasSiswa.objects.get(Q(siswa_id=siswa) & Q(tahun_id=tahun) & Q(kelas_id=kelas))
+        raport = Raport.objects.filter(Q(siswa_id=siswa) & Q(mapel__tahun_id=tahun) & Q(mapel__kelas_id=kelas))
+        rekap_list = raport_list(raport)
+        parrams = {
+            'tahun': datasiswa.tahun.tahun,
+            'kelas': datasiswa.kelas.nama_kelas,
+            'siswa': datasiswa.siswa.nama,
+            'nis': datasiswa.siswa.nis,
+            'raport': rekap_list,
+            'request': request
+        }
+        return Render.render('raport/raport_siswa_print.html', parrams)
+
 def get_guru(userid):
     return Guru.objects.get(user=userid)
 
@@ -348,10 +433,12 @@ def raport_list(raport):
         rekap['nis'] = nilai.siswa.nis
         rekap['siswa'] = nilai.siswa.nama
         rekap['mapel'] = nilai.mapel.mapel.mapel.nama_mapel
+        rekap['kkm_pengetahuan'] = nilai.mapel.pengetahuan
         rekap['angka_pengetahuan'] = nilai.pengetahuan
         rekap['predikat_pengetahuan'] = get_predikat(nilai.mapel.pengetahuan, nilai.pengetahuan)
         rekap['desc_pengetahuan'] = nilai.mapel.descmapel_set.get(
             predikat=get_predikat(nilai.mapel.pengetahuan, nilai.pengetahuan)).pengetahuan
+        rekap['kkm_keterampilan'] = nilai.mapel.ketrampilan
         rekap['angka_keterampilan'] = nilai.keterampilan
         rekap['predikat_keterampilan'] = get_predikat(nilai.mapel.ketrampilan, nilai.keterampilan)
         rekap['desc_keterampilan'] = nilai.mapel.descmapel_set.get(
