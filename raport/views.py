@@ -1,6 +1,7 @@
 import io
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import CreateView, ListView, UpdateView, View
 from django.forms.models import inlineformset_factory
@@ -8,6 +9,7 @@ from django.forms.models import inlineformset_factory
 from guru.models import Guru
 from mapel.models import KkmMapel,Kelas,Mapel,DescMapel,Mengajar
 from siswa.models import Kelas as KelasSiswa,Siswa
+from walikelas.models import WaliKelas
 from raport.models import Raport
 from .kkmform import KkmFormset,KkmmapelForm
 from .raportform import RaportForm
@@ -23,9 +25,14 @@ class RaportIndexView(LoginRequiredMixin,ListView):
     def get_context_data(self, **kwargs):
         guru = get_guru(self.request.user.id)
         jadwal = get_mengajar(guru)
+        wali = WaliKelas.objects.get(guru_id=guru.id)
+        nilai = KelasSiswa.objects.filter(Q(kelas_id=wali.kelas) & Q(tahun_id=wali.tahun))
+
         context = {
             'jadwal': jadwal,
-            'title': 'Nilai siswa'
+            'title': 'Nilai siswa',
+            'wali': wali,
+            'nilai': nilai
         }
         return context
 
@@ -265,6 +272,29 @@ class RaportView(LoginRequiredMixin,ListView):
     model = Raport
     template_name = 'raport/index.html'
 
+class RaportSiswaView(LoginRequiredMixin,ListView):
+    model = Raport
+    template_name = 'raport/raport_siswa.html'
+    def get_context_data(self, **kwargs):
+        context = super(RaportSiswaView, self).get_context_data(**kwargs)
+        idsiswa = self.kwargs['siswa']
+        idkelas = self.kwargs['kelas']
+        idtahun = self.kwargs['tahun']
+        siswa = KelasSiswa.objects.get(Q(siswa_id=idsiswa) & Q(tahun_id=idtahun) & Q(kelas_id=idkelas))
+        raport = Raport.objects.filter(Q(siswa_id=idsiswa) & Q(mapel__tahun_id=idtahun) & Q(mapel__kelas_id=idkelas))
+        rekap_list = raport_list(raport)
+        context['raport'] = rekap_list
+        context['siswa'] = siswa.siswa.nama
+        context['nis'] = siswa.siswa.nis
+        context['kelas'] = siswa.kelas.nama_kelas
+        context['tahun'] = siswa.tahun
+        return context
+
+class RaportSiswaDownload(LoginRequiredMixin,View):
+    pass
+
+class RaportSiswaPrint(LoginRequiredMixin,View):
+    pass
 def get_guru(userid):
     return Guru.objects.get(user=userid)
 
@@ -308,5 +338,23 @@ def get_rekap(kkm, nilai):
             predikat=get_predikat(kkm.pengetahuan, ni.pengetahuan)).pengetahuan
         rekap['desc_keterampilan'] = kkm.descmapel_set.get(
             predikat=get_predikat(kkm.ketrampilan, ni.keterampilan)).ketrampilan
+        rekap_list.append(rekap)
+    return rekap_list
+
+def raport_list(raport):
+    rekap_list = []
+    for nilai in raport:
+        rekap = {}
+        rekap['nis'] = nilai.siswa.nis
+        rekap['siswa'] = nilai.siswa.nama
+        rekap['mapel'] = nilai.mapel.mapel.mapel.nama_mapel
+        rekap['angka_pengetahuan'] = nilai.pengetahuan
+        rekap['predikat_pengetahuan'] = get_predikat(nilai.mapel.pengetahuan, nilai.pengetahuan)
+        rekap['desc_pengetahuan'] = nilai.mapel.descmapel_set.get(
+            predikat=get_predikat(nilai.mapel.pengetahuan, nilai.pengetahuan)).pengetahuan
+        rekap['angka_keterampilan'] = nilai.keterampilan
+        rekap['predikat_keterampilan'] = get_predikat(nilai.mapel.ketrampilan, nilai.keterampilan)
+        rekap['desc_keterampilan'] = nilai.mapel.descmapel_set.get(
+            predikat=get_predikat(nilai.mapel.ketrampilan, nilai.keterampilan)).ketrampilan
         rekap_list.append(rekap)
     return rekap_list

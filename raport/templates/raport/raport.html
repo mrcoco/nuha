@@ -6,7 +6,7 @@
         <div id="toolbar" class="initialized"></div>
         <div class="clear"></div>
 
-
+        <h1>MATA PELAJARAN YANG DIAMPU</h1>
         <div class="results" style="margin-bottom: 110px;">
             {% if messages %}
                 <ul class="messagelist">
@@ -94,6 +94,72 @@
             <div class="label"><b>{{ jadwal.count }}</b> Mata pelajaran</div>
             <div class="cf"></div>
         </div>
+
+        {% if wali %}
+            <div class="results" style="margin-bottom: 110px;">
+            <h1> RAPORT SISWA </h1>
+            <table id="result_list">
+                <thead>
+                    <tr>
+                        <th scope="col" class="action-checkbox-column">
+                           <div class="text">
+                               <span>
+                                   <input type="checkbox" id="action-toggle" style="display: inline-block;">
+                                   <label for="action-toggle"></label>
+                               </span>
+                           </div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">Nama Siswa</a></div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">Kelas</a></div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">Tahun Ajaran</a></div>
+                           <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="sortable column-mapel">
+                           <div class="text"><a href="#">AKSI</a></div>
+                           <div class="clear"></div>
+                        </th>
+                    </tr>
+                </thead>
+            <tbody>
+            {% for siswa in nilai %}
+                    <tr class="row1">
+                        <td class="action-checkbox">
+                            <input type="checkbox" name="_selected_action" value="1" class="action-select" id="unique_checkbox_id_0">
+                            <label for="unique_checkbox_id_0"></label>
+                        </td>
+                        <td class="field-siswa nowrap">
+                            <a href="/raport/raport/{{ siswa.id }}/{{ siswa.kelas_id }}/{{ siswa.tahun_id }}/detail">{{ siswa.siswa }}</a>
+                        </td>
+                        <td class="field-kelas nowrap">
+                            <a href="#">{{ siswa.kelas }}</a>
+                        </td>
+                        <td class="field-tahun nowrap">
+                            <a href="#">{{ siswa.tahun }}</a>
+                        </td>
+{#                        <th class="field-siswa nowrap">#}
+{#                            <a href="#">{{ siswa.kelas.kkmmapel_set.get }}</a>#}
+{#                        </th>#}
+
+                        <td class="field-aksi">
+                            <a href="/raport/raport/{{ siswa.id }}/{{ siswa.kelas_id }}/{{ siswa.tahun_id }}/detail">tampil</a> |
+                            <a href="/raport/raport/{{ siswa.id }}/{{ siswa.kelas_id }}/{{ siswa.tahun_id }}/download">download</a> |
+                            <a href="/raport/raport/{{ siswa.id }}/{{ siswa.kelas_id }}/{{ siswa.tahun_id }}/print">Print</a>
+
+                        </td>
+                    </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        {% endif %}
     </div>
   </div>
 {% endblock %}
