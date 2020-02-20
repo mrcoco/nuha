@@ -287,7 +287,8 @@ class RaportSiswaView(LoginRequiredMixin,ListView):
         context['siswa'] = siswa.siswa.nama
         context['nis'] = siswa.siswa.nis
         context['kelas'] = siswa.kelas.nama_kelas
-        context['tahun'] = siswa.tahun
+        context['tahun'] = siswa.tahun.tahun
+        context['sem'] = siswa.tahun.get_sem()
         return context
 
 class RaportSiswaDownload(LoginRequiredMixin,View):
@@ -315,7 +316,7 @@ class RaportSiswaDownload(LoginRequiredMixin,View):
         worksheet.write('H2', 'SMT')
         worksheet.write('H3', 'Tahun')
         worksheet.write('J1', datasiswa.kelas.nama_kelas)
-        worksheet.write('J2', 'SMT')
+        worksheet.write('J2', datasiswa.tahun.semester)
         worksheet.write('J3', datasiswa.tahun.tahun)
 
         worksheet.merge_range('A15:A16','NO',cell_format)
@@ -372,6 +373,7 @@ class RaportSiswaPrint(LoginRequiredMixin,View):
         rekap_list = raport_list(raport)
         parrams = {
             'tahun': datasiswa.tahun.tahun,
+            'sem': datasiswa.tahun.semester,
             'kelas': datasiswa.kelas.nama_kelas,
             'siswa': datasiswa.siswa.nama,
             'nis': datasiswa.siswa.nis,
