@@ -29,8 +29,8 @@ urlpatterns = [
     #path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
     #path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
-    path('',FrontViews.index),
-    path('login/', FrontViews.loginpage,name="user_login"),
+    path('',FrontViews.FrontEndIndex.as_view()),
+    path('login/', FrontViews.LoginView.as_view(),name="user_login"),
     path('frontend/',include('frontend.urls')),
     path('raport/',include('raport.urls')),
     path('admin/', admin.site.urls),
