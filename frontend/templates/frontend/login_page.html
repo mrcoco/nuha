@@ -37,6 +37,30 @@
 
         <form action="{% url 'user_login' %}" method="post" id="login-form">
             {%  csrf_token %}
+            {% if form.errors %}
+                <!-- Error messaging -->
+                <div id="errors">
+                    <div class="inner">
+                        <p class="errornote">There were some errors in the information you entered on KKM. Please correct the following:</p>
+                        <ul>
+                            {% for field in form %}
+                                {% if field.errors %}<li class="errornote">{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!-- /Error messaging -->
+            {% endif %}
+            {% for message in messages %}
+
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+
+                        {{ message }}
+
+                    </div>
+            {% endfor %}
+
           <div class="form-row">
 
             <label class="required" for="id_username">Username:</label> <input type="text" name="username" autofocus id="id_username" required>
